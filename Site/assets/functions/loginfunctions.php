@@ -86,4 +86,11 @@ function updateUser($user, $pass, $uuid, $email) {
 	
 	return false;
 }
+
+function deleteUser($user) {
+	$query = "delete from users where BINARY username='$user'";
+	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+	
+	return $result;
+}
 ?>

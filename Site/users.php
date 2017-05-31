@@ -50,6 +50,10 @@ if (!isset($_SESSION['login'])) {
                     <div class="notification alert alert-danger error-update" role="alert">
                         <span class="fa fa-minus-circle"></span> Unable to update user!
                     </div>
+					
+                    <div class="notification alert alert-danger error-delete" role="alert">
+                        <span class="fa fa-minus-circle"></span> Unable to delete user!
+                    </div>
 
                     <div class="notification alert alert-success changed">
                         <span class="fa fa-check-circle"></span> Successfully changed password!
@@ -61,6 +65,10 @@ if (!isset($_SESSION['login'])) {
 					
                     <div class="notification alert alert-success updated">
                         <span class="fa fa-check-circle"></span> Successfully updated user!
+                    </div>
+					
+                    <div class="notification alert alert-success deleted">
+                        <span class="fa fa-check-circle"></span> Successfully deleted user!
                     </div>
                 </div>
             </div>
@@ -137,8 +145,8 @@ if (!isset($_SESSION['login'])) {
 								<b class="caret"></b>
 							</a>
 							<ul id="submenu" class="panel-collapse collapse panel-switch" role="menu">
-								<li><a href="#"><i class="fa fa-caret-right"></i>Posts</a></li>
-								<li><a href="#"><i class="fa fa-caret-right"></i>Comments</a></li>
+								<li><a href="#"><i class="fa fa-caret-right"></i>Server 1</a></li>
+								<li><a href="#"><i class="fa fa-caret-right"></i>Server 2</a></li>
 							</ul>
 						</li>
                     </ul>
@@ -278,6 +286,41 @@ if (!isset($_SESSION['login'])) {
                     </div>
                 </div>
             </div>
+			
+			
+			<!-- delete user modal -->
+			<div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+						<h3 class="modal-title" id="lineModalLabel">Delete user</h3>
+					</div>
+					<div class="modal-body">
+						
+						<!-- content goes here -->
+						<form role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+						  <h4 id="deleteinfo">Are you sure you want to delete <h4>
+						  
+						  <div class="form-group">
+							<input type="hidden" name="deleteusername">
+						  </div>
+
+					</div>
+					<div class="modal-footer">
+						<div class="btn-group btn-group-justified" role="group" aria-label="group button">
+							<div class="btn-group" role="group">
+								<button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Close</button>
+							</div>
+							<div class="btn-group" role="group">
+								<button type="submit" class="btn btn-default">Submit</button>
+							</div>
+						</div>
+					</div>
+					</form>
+				</div>
+			  </div>
+			</div>
 
             <!-- main -->
             <main id="page-content-wrapper" role="main">
@@ -303,7 +346,7 @@ if (!isset($_SESSION['login'])) {
 									echo "<td>". $row["username"] . "</td>";
 									echo "<td> " . $ingameName . "</td>";
 									echo "<td>". $row["email"] . "</td>";
-									echo "<td><a class=\"btn btn-info btn-xs\" onclick=\"editUser('" . $row["username"] . "', '" . $ingameName ."', '" . $row["email"] . "');\" href=\"#\"><span class=\"fa fa-pencil\"></span> Edit</a> <a href=\"#\" class=\"btn btn-danger btn-xs\"><span class=\"fa fa-trash\"></span> Delete</a></td>";
+									echo "<td><a class=\"btn btn-info btn-xs\" onclick=\"editUser('" . $row["username"] . "', '" . $ingameName ."', '" . $row["email"] . "');\" href=\"#\"><span class=\"fa fa-pencil\"></span> Edit</a> <a onclick=\"deleteUser('" . $row["username"] . "');\" href=\"#\" class=\"btn btn-danger btn-xs\"><span class=\"fa fa-trash\"></span> Delete</a></td>";
 									echo "</tr>";
 								}
 							?>
@@ -345,6 +388,13 @@ if (!isset($_SESSION['login'])) {
 				$('input[name="editemail"]').val(email);
 				
 				$('#editUser').modal('show');
+			}
+			
+			function deleteUser(username) {
+				$('input[name="deleteusername"]').val(username);
+				$("#deleteinfo").text("Are you sure you want to delete " + username + "?");
+				
+				$('#deleteUser').modal('show');
 			}
         </script>
         <?php
@@ -399,7 +449,23 @@ if (!isset($_SESSION['login'])) {
 			 if (!headers_sent()) {
 				header('Location:'.$_SERVER['PHP_SELF']);
 			 } else {
-				 //reloadPage();
+				 reloadPage();
+			 }
+		 }
+		 
+		 if (isset($_POST['deleteusername'])) {
+			 $user = mysqli_real_escape_string($GLOBALS['con'], $_POST['deleteusername']);
+			 
+			 if (deleteUser($user)) {
+				 showNoti("deleted");
+			 } else {
+				 showNoti("error-delete");
+			 }
+			 
+			 if (!headers_sent()) {
+				header('Location:'.$_SERVER['PHP_SELF']);
+			 } else {
+				 reloadPage();
 			 }
 		 }
 		 ?>
