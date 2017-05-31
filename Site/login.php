@@ -83,6 +83,8 @@
 			} else {
 				showNoti("error-login");
 			}
+			
+			header("location: login");
 		 }
 		 ?>
     </body>

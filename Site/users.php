@@ -34,22 +34,22 @@ if (!isset($_SESSION['login'])) {
     </head>
 
     <body>
-		<!-- Notifications start -->
+        <!-- Notifications start -->
         <div class="container">
             <div class="row">
                 <div class="com-md-12">
                     <div class="notification alert alert-danger error-change" role="alert">
                         <span class="fa fa-minus-circle"></span> Invalid password!
                     </div>
-					
-					<div class="notification alert alert-success changed">
-						<span class="fa fa-check-circle"></span> Successfully changed password!
-					</div>
+
+                    <div class="notification alert alert-success changed">
+                        <span class="fa fa-check-circle"></span> Successfully changed password!
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Notifications end -->
-		
+
         <div id="navbar-wrapper">
             <header>
                 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -66,7 +66,7 @@ if (!isset($_SESSION['login'])) {
                         <div id="navbar-collapse" class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown">
-                                    <a id="user-profile" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> <?php echo $_SESSION['username'] ?></a>
+                                    <a id="user-profile" href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="https://minotar.net/avatar/<?php echo $_SESSION['mcuser'] ?>" class="img-responsive img-thumbnail img-circle"> <?php echo $_SESSION['username'] ?></a>
                                     <ul class="dropdown-menu dropdown-block" role="menu">
                                         <li><a data-toggle="modal" data-target="#changePassword" href="#">Change password</a></li>
                                         <li><a href="logout.php">Logout</a></li>
@@ -164,39 +164,36 @@ if (!isset($_SESSION['login'])) {
 
             <!-- main -->
             <main id="page-content-wrapper" role="main">
-				<div class="container">
-					<div class="row col-md-6 col-md-offset-2 custyle">
-					<table class="table table-striped custab">
-					<thead>
-					<a href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add new categories</a>
-						<tr>
-							<th>ID</th>
-							<th>Title</th>
-							<th>Parent ID</th>
-							<th class="text-center">Action</th>
-						</tr>
-					</thead>
-							<tr>
-								<td>1</td>
-								<td>News</td>
-								<td>News Cate</td>
-								<td class="text-center"><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
-							</tr>
-							<tr>
-								<td>2</td>
-								<td>Products</td>
-								<td>Main Products</td>
-								<td class="text-center"><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
-							</tr>
-							<tr>
-								<td>3</td>
-								<td>Blogs</td>
-								<td>Parent Blogs</td>
-								<td class="text-center"><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
-							</tr>
-					</table>
-					</div>
-				</div>
+                <div class="container-fluid">
+                    <input id="filter" type="text" class="form-control" placeholder="Search">
+					
+					<br>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>MC Username</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+							<?php
+								foreach (getAllUsers() as $row) {
+									echo "<tr>";
+									echo "<td>". $row["username"] . "</td>";
+									echo "<td> ". $row["mcuser"] . "</td>";
+									echo "<td>". $row["email"] . "</td>";
+									echo "<td><a class='btn btn-info btn-xs' href='#'><span class='fa fa-pencil'></span> Edit</a> <a href='#' class='btn btn-danger btn-xs'><span class='fa fa-trash'></span> Delete</a></td>";
+									echo "</tr>";
+								}
+							?>
+                        </tbody>
+                    </table>
+                </div>
+				
+				<button type="button" class="btn btn-warning btn-circle btn-xl"><i class="fa fa-plus"></i></button>
+
             </main>
         </div>
 
@@ -204,8 +201,26 @@ if (!isset($_SESSION['login'])) {
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script type="text/javascript" src="assets/js/notification.js"></script>
-		
-		<?php
+        <script>
+            // Users search
+			$(document).ready(function () {
+				(function ($) {
+
+					$('#filter').keyup(function () {
+
+						var rex = new RegExp($(this).val(), 'i');
+						$('.searchable tr').hide();
+						$('.searchable tr').filter(function () {
+							return rex.test($(this).text());
+						}).show();
+
+					})
+
+				}(jQuery));
+
+			});
+        </script>
+        <?php
          if (isset($_POST['oldpassword']) && isset($_POST['newpassword'])) {
 			$oldpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['oldpassword']);
          	$newpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['newpassword']);
@@ -219,6 +234,8 @@ if (!isset($_SESSION['login'])) {
 			} else {
 				showNoti("error-change");
 			}
+			
+			header("location: index");
 		 }
 		 ?>
     </body>

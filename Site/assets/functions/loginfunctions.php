@@ -10,6 +10,11 @@ function login($user, $pass) {
 	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
 	
 	if (mysqli_num_rows($result)) {
+		// Store mc username
+		while($row = $result->fetch_assoc()) {
+			$_SESSION['mcuser'] = $row["mcuser"];
+		}
+		
 		return true;
 	}
 	return false;
@@ -24,5 +29,24 @@ function changePassword($user, $pass, $newPass) {
 	}
 	
 	return false;
+}
+
+function getAllUsers() {
+	$rows = array();
+	
+	if ($_SESSION['login'] == true) {
+		// perm check
+		
+		$query = "select * from users";
+		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+		
+		if (mysqli_num_rows($result)) {
+			while($row = $result->fetch_assoc()) { 
+				array_push($rows, $row);
+			}
+		}
+	}
+	
+	return $rows;
 }
 ?>

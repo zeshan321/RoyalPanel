@@ -143,6 +143,10 @@ body {
     background: #750002 !important;
 }
 
+#page-content-wrapper {
+	padding-top: 30px;
+}
+
 #selected {
     background: #750002 !important;
 }

@@ -65,7 +65,7 @@ if (!isset($_SESSION['login'])) {
                         <div id="navbar-collapse" class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown">
-                                    <a id="user-profile" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user-circle fa-lg" aria-hidden="true"></i> <?php echo $_SESSION['username'] ?></a>
+                                    <a id="user-profile" href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="https://minotar.net/avatar/<?php echo $_SESSION['mcuser'] ?>" class="img-responsive img-thumbnail img-circle"> <?php echo $_SESSION['username'] ?></a>
                                     <ul class="dropdown-menu dropdown-block" role="menu">
                                         <li><a data-toggle="modal" data-target="#changePassword" href="#">Change password</a></li>
                                         <li><a href="logout.php">Logout</a></li>
@@ -186,6 +186,8 @@ if (!isset($_SESSION['login'])) {
 			} else {
 				showNoti("error-change");
 			}
+			
+			header("location: index");
 		 }
 		 ?>
     </body>
