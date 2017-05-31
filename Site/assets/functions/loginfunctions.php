@@ -15,7 +15,14 @@ function login($user, $pass) {
 	return false;
 }
 
-function changePassword($user, $pass) {
-		
+function changePassword($user, $pass, $newPass) {
+	if (login($user, $pass)) {
+		$query = "update users SET password='$newPass' where password='$pass'";
+		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+
+		return $result;
+	}
+	
+	return false;
 }
 ?>
