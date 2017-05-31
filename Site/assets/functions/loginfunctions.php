@@ -63,4 +63,27 @@ function createUser($user, $pass, $uuid, $email) {
 		return $result;
 	}
 }
+
+function updateUser($user, $pass, $uuid, $email) {
+	$query = "select * from users where BINARY username='$user'";
+	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+	
+	if (!mysqli_num_rows($result)) {
+		return false;
+	} else {
+		if ($pass == "") {
+			$query = "update users SET uuid='$uuid', email='$email' where username='$user'";
+			$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+			
+			return $result;
+		} else {
+			$query = "update users SET password='$pass', uuid='$uuid', email='$email' where username='$user'";
+			$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+			
+			return $result;
+		}
+	}
+	
+	return false;
+}
 ?>

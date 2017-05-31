@@ -14,4 +14,8 @@ function debug($data) {
 function showNoti($type) {
 	echo "<script>addNotification('" . $type . "');</script>";
 }
+
+function reloadPage() {
+	echo "<script>window.location.href = window.location.href;</script>";
+}
 ?>

@@ -46,6 +46,10 @@ if (!isset($_SESSION['login'])) {
                     <div class="notification alert alert-danger error-user" role="alert">
                         <span class="fa fa-minus-circle"></span> Unable to create new user!
                     </div>
+					
+                    <div class="notification alert alert-danger error-update" role="alert">
+                        <span class="fa fa-minus-circle"></span> Unable to update user!
+                    </div>
 
                     <div class="notification alert alert-success changed">
                         <span class="fa fa-check-circle"></span> Successfully changed password!
@@ -53,6 +57,10 @@ if (!isset($_SESSION['login'])) {
 					
                     <div class="notification alert alert-success created">
                         <span class="fa fa-check-circle"></span> Successfully created new user!
+                    </div>
+					
+                    <div class="notification alert alert-success updated">
+                        <span class="fa fa-check-circle"></span> Successfully updated user!
                     </div>
                 </div>
             </div>
@@ -121,12 +129,18 @@ if (!isset($_SESSION['login'])) {
 								<span class="sidebar-title">Stats</span>
 							</a>
                         </li>
-                        <li>
-                            <a href="#">
+						
+						<li>
+							<a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu">
 								<span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
 								<span class="sidebar-title">Console</span>
+								<b class="caret"></b>
 							</a>
-                        </li>
+							<ul id="submenu" class="panel-collapse collapse panel-switch" role="menu">
+								<li><a href="#"><i class="fa fa-caret-right"></i>Posts</a></li>
+								<li><a href="#"><i class="fa fa-caret-right"></i>Comments</a></li>
+							</ul>
+						</li>
                     </ul>
                 </aside>
             </div>
@@ -227,26 +241,26 @@ if (!isset($_SESSION['login'])) {
                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                             <h3 class="modal-title" id="lineModalLabel">Edit user</h3>
                         </div>
-                        <form class="login-form" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                        <form id="editUserForm" class="login-form" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
                             <div class="modal-body">
 
                                 <!-- content goes here -->
-                                <form>
                                     <div class="form-group">
                                         <label for="addusername">Username</label>
-                                        <input type="text" class="form-control" name="addusername" placeholder="Enter username" required>
+                                        <input type="text" class="form-control" name="editusername" placeholder="Enter username" disabled>
+										<input type="hidden" class="form-control" name="editusernamehide" placeholder="Enter username">
                                     </div>
                                     <div class="form-group">
                                         <label for="addpassword">Password</label>
-                                        <input type="password" class="form-control" name="addpassword" placeholder="Leave blank to not change">
+                                        <input type="password" class="form-control" name="editpassword" placeholder="Leave blank to not change">
                                     </div>
                                     <div class="form-group">
                                         <label for="addmcusername">MC Username</label>
-                                        <input type="text" class="form-control" name="addmcusername" placeholder="Enter MC username" required>
+                                        <input type="text" class="form-control" name="editmcusername" placeholder="Enter MC username" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="addemail">Email</label>
-                                        <input type="email" class="form-control" name="addemail" placeholder="Enter email" required>
+                                        <input type="email" class="form-control" name="editemail" placeholder="Enter email" required>
                                     </div>
                             </div>
                             <div class="modal-footer">
@@ -256,7 +270,7 @@ if (!isset($_SESSION['login'])) {
                                     </div>
 
                                     <div class="btn-group" role="group">
-                                        <button type="submit" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">Create</button>
+                                        <button type="submit" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">Update</button>
                                     </div>
                                 </div>
                             </div>
@@ -289,7 +303,7 @@ if (!isset($_SESSION['login'])) {
 									echo "<td>". $row["username"] . "</td>";
 									echo "<td> " . $ingameName . "</td>";
 									echo "<td>". $row["email"] . "</td>";
-									echo "<td><a class='btn btn-info btn-xs' onclick='editUser(". $row["username"] .", ". $ingameName . ", ". $row["email"] ."); href='#'><span class='fa fa-pencil'></span> Edit</a> <a href='#' class='btn btn-danger btn-xs'><span class='fa fa-trash'></span> Delete</a></td>";
+									echo "<td><a class=\"btn btn-info btn-xs\" onclick=\"editUser('" . $row["username"] . "', '" . $ingameName ."', '" . $row["email"] . "');\" href=\"#\"><span class=\"fa fa-pencil\"></span> Edit</a> <a href=\"#\" class=\"btn btn-danger btn-xs\"><span class=\"fa fa-trash\"></span> Delete</a></td>";
 									echo "</tr>";
 								}
 							?>
@@ -298,7 +312,6 @@ if (!isset($_SESSION['login'])) {
                 </div>
 				
 				<button type="button" data-toggle="modal" data-target="#addUser" class="btn btn-circle btn-xl"><i class="fa fa-plus"></i></button>
-				
             </main>
         </div>
 
@@ -325,9 +338,13 @@ if (!isset($_SESSION['login'])) {
 
 			});
 			
-			function editUser(user, mcuser, email) {
-				Console.log("test")
-				Console.log(user + " " + mcuser + " " + email);
+			function editUser(username, ingame, email) {
+				$('input[name="editusernamehide"]').val(username);
+				$('input[name="editusername"]').val(username);
+				$('input[name="editmcusername"]').val(ingame);
+				$('input[name="editemail"]').val(email);
+				
+				$('#editUser').modal('show');
 			}
         </script>
         <?php
@@ -360,7 +377,30 @@ if (!isset($_SESSION['login'])) {
 				 showNoti("error-user");
 			 }
 
-			 header("location: users");
+			 if (!headers_sent()) {
+				header('Location:'.$_SERVER['PHP_SELF']);
+			 } else {
+				 reloadPage();
+			 }
+		 }
+		 
+		 if (isset($_POST['editusernamehide']) && isset($_POST['editmcusername']) && isset($_POST['editemail'])) {
+			 $user = mysqli_real_escape_string($GLOBALS['con'], $_POST['editusernamehide']);
+			 $pass = mysqli_real_escape_string($GLOBALS['con'], $_POST['editpassword']);
+			 $uuid = mysqli_real_escape_string($GLOBALS['con'], username_to_uuid($_POST['editmcusername']));
+			 $email = mysqli_real_escape_string($GLOBALS['con'], $_POST['editemail']);
+
+			 if (updateUser($user, $pass, $uuid, $email)) {
+				 showNoti("updated");
+			 } else {
+				 showNoti("error-update");
+			 }
+			 
+			 if (!headers_sent()) {
+				header('Location:'.$_SERVER['PHP_SELF']);
+			 } else {
+				 //reloadPage();
+			 }
 		 }
 		 ?>
     </body>

@@ -112,12 +112,17 @@ if (!isset($_SESSION['login'])) {
 								<span class="sidebar-title">Stats</span>
 							</a>
                         </li>
-                        <li>
-                            <a href="#">
+						<li>
+							<a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu">
 								<span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
 								<span class="sidebar-title">Console</span>
+								<b class="caret"></b>
 							</a>
-                        </li>
+							<ul id="submenu" class="panel-collapse collapse panel-switch" role="menu">
+								<li><a href="#"><i class="fa fa-caret-right"></i>Posts</a></li>
+								<li><a href="#"><i class="fa fa-caret-right"></i>Comments</a></li>
+							</ul>
+						</li>
                     </ul>
                 </aside>
             </div>
@@ -188,7 +193,11 @@ if (!isset($_SESSION['login'])) {
 				showNoti("error-change");
 			}
 			
-			header("location: index");
+			if (!headers_sent()) {
+				header('Location:'.$_SERVER['PHP_SELF']);
+			 } else {
+				 reloadPage();
+			 }
 		 }
 		 ?>
     </body>
