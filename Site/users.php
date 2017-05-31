@@ -24,6 +24,7 @@ if (!isset($_SESSION['login'])) {
 
         <!-- custom css -->
         <link href='assets/css/home.css' rel='stylesheet' type='text/css'>
+        <link href='assets/css/users.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/notification.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/animate.css' rel='stylesheet' type='text/css'>
 
@@ -82,40 +83,40 @@ if (!isset($_SESSION['login'])) {
                 <aside id="sidebar">
                     <ul id="sidemenu" class="sidebar-nav">
                         <li>
-                            <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-home"></i></span>
-                            <span class="sidebar-title">Home</span>
-                        </a>
+                            <a href="index.php">
+								<span class="sidebar-icon"><i class="fa fa-home"></i></span>
+								<span class="sidebar-title">Home</span>
+							</a>
+                        </li>
+                        <li>
+                            <a href="users.php" id="selected">
+								<span class="sidebar-icon"><i class="fa fa-users"></i></span>
+								<span class="sidebar-title">Users</span>
+							</a>
                         </li>
                         <li>
                             <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-users"></i></span>
-                            <span class="sidebar-title">Users</span>
-                        </a>
+								<span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
+								<span class="sidebar-title">Wiki</span>
+							</a>
                         </li>
                         <li>
                             <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
-                            <span class="sidebar-title">Wiki</span>
-                        </a>
+								<span class="sidebar-icon"><i class="fa fa-book"></i></span>
+								<span class="sidebar-title">Logs</span>
+							</a>
                         </li>
                         <li>
                             <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-book"></i></span>
-                            <span class="sidebar-title">Logs</span>
-                        </a>
+								<span class="sidebar-icon"><i class="fa fa-line-chart"></i></span>
+								<span class="sidebar-title">Stats</span>
+							</a>
                         </li>
                         <li>
                             <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-line-chart"></i></span>
-                            <span class="sidebar-title">Stats</span>
-                        </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
-                            <span class="sidebar-title">Console</span>
-                        </a>
+								<span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
+								<span class="sidebar-title">Console</span>
+							</a>
                         </li>
                     </ul>
                 </aside>
@@ -163,7 +164,39 @@ if (!isset($_SESSION['login'])) {
 
             <!-- main -->
             <main id="page-content-wrapper" role="main">
-
+				<div class="container">
+					<div class="row col-md-6 col-md-offset-2 custyle">
+					<table class="table table-striped custab">
+					<thead>
+					<a href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add new categories</a>
+						<tr>
+							<th>ID</th>
+							<th>Title</th>
+							<th>Parent ID</th>
+							<th class="text-center">Action</th>
+						</tr>
+					</thead>
+							<tr>
+								<td>1</td>
+								<td>News</td>
+								<td>News Cate</td>
+								<td class="text-center"><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
+							</tr>
+							<tr>
+								<td>2</td>
+								<td>Products</td>
+								<td>Main Products</td>
+								<td class="text-center"><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td>Blogs</td>
+								<td>Parent Blogs</td>
+								<td class="text-center"><a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Del</a></td>
+							</tr>
+					</table>
+					</div>
+				</div>
             </main>
         </div>
 

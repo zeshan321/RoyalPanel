@@ -81,41 +81,41 @@ if (!isset($_SESSION['login'])) {
             <div id="sidebar-wrapper">
                 <aside id="sidebar">
                     <ul id="sidemenu" class="sidebar-nav">
-                        <li selected>
-                            <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-home"></i></span>
-                            <span class="sidebar-title">Home</span>
-                        </a>
+                        <li>
+                            <a href="index.php" id="selected">
+								<span class="sidebar-icon"><i class="fa fa-home"></i></span>
+								<span class="sidebar-title">Home</span>
+							</a>
+                        </li>
+                        <li>
+                            <a href="users.php">
+								<span class="sidebar-icon"><i class="fa fa-users"></i></span>
+								<span class="sidebar-title">Users</span>
+							</a>
                         </li>
                         <li>
                             <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-users"></i></span>
-                            <span class="sidebar-title">Users</span>
-                        </a>
+								<span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
+								<span class="sidebar-title">Wiki</span>
+							</a>
                         </li>
                         <li>
                             <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
-                            <span class="sidebar-title">Wiki</span>
-                        </a>
+								<span class="sidebar-icon"><i class="fa fa-book"></i></span>
+								<span class="sidebar-title">Logs</span>
+							</a>
                         </li>
                         <li>
                             <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-book"></i></span>
-                            <span class="sidebar-title">Logs</span>
-                        </a>
+								<span class="sidebar-icon"><i class="fa fa-line-chart"></i></span>
+								<span class="sidebar-title">Stats</span>
+							</a>
                         </li>
                         <li>
                             <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-line-chart"></i></span>
-                            <span class="sidebar-title">Stats</span>
-                        </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                            <span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
-                            <span class="sidebar-title">Console</span>
-                        </a>
+								<span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
+								<span class="sidebar-title">Console</span>
+							</a>
                         </li>
                     </ul>
                 </aside>
