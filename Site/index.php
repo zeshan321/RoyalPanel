@@ -3,6 +3,7 @@ session_start();
 
 include 'assets/functions/loginfunctions.php';
 include 'assets/functions/generalfunctions.php';
+include 'assets/functions/mcuserapi.php';
 
 if (!isset($_SESSION['login'])) {
 	if ($_SESSION['login'] != true) {
@@ -137,11 +138,11 @@ if (!isset($_SESSION['login'])) {
                                 <form>
                                     <div class="form-group">
                                         <label for="oldpassword">Old password</label>
-                                        <input type="password" class="form-control" name="oldpassword" placeholder="Enter old password">
+                                        <input type="password" class="form-control" name="oldpassword" placeholder="Enter old password" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="newpassword">Current password</label>
-                                        <input type="password" class="form-control" name="newpassword" placeholder="Enter new password">
+                                        <input type="password" class="form-control" name="newpassword" placeholder="Enter new password" required>
                                     </div>
 
                             </div>

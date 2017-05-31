@@ -3,6 +3,7 @@
 
    include 'assets/functions/loginfunctions.php';
    include 'assets/functions/generalfunctions.php';
+   include 'assets/functions/mcuserapi.php';
    
    if (isset($_SESSION['login'])) {
 	if ($_SESSION['login'] == true) {
@@ -57,8 +58,8 @@
                 <h1>Willow</h1>
                 <br>
                 <form class="login-form" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-                    <input type="text" name="user" placeholder="Username" />
-                    <input type="password" name="pass" placeholder="Password" />
+                    <input type="text" name="user" placeholder="Username" required/>
+                    <input type="password" name="pass" placeholder="Password" required/>
                     <button type="submit">login</button>
                 </form>
             </div>

@@ -12,7 +12,7 @@ function login($user, $pass) {
 	if (mysqli_num_rows($result)) {
 		// Store mc username
 		while($row = $result->fetch_assoc()) {
-			$_SESSION['mcuser'] = $row["mcuser"];
+			$_SESSION['mcuser'] = uuid_to_username($row["uuid"]);
 		}
 		
 		return true;
@@ -48,5 +48,19 @@ function getAllUsers() {
 	}
 	
 	return $rows;
+}
+
+function createUser($user, $pass, $uuid, $email) {
+	$query = "select * from users where BINARY username='$user'";
+	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+	
+	if (mysqli_num_rows($result)) {
+		return false;
+	} else {
+		$query = "insert into users (username, password, uuid, email, permissions) VALUES ('$user', '$pass', '$uuid', '$email', '')";
+		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+
+		return $result;
+	}
 }
 ?>
