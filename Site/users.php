@@ -145,8 +145,14 @@ if (!isset($_SESSION['login'])) {
 								<b class="caret"></b>
 							</a>
 							<ul id="submenu" class="panel-collapse collapse panel-switch" role="menu">
-								<li><a href="#"><i class="fa fa-caret-right"></i>Server 1</a></li>
-								<li><a href="#"><i class="fa fa-caret-right"></i>Server 2</a></li>
+								<?php
+									$index = 0;
+									
+									foreach ($server_names as $server) {
+										echo "<li><a href=\"console.php?name=". $server . "&ip=" . $server_address[$index] ."\"><i class=\"fa fa-caret-right\"></i>" .  $server . "</a></li>";
+										$index = $index + 1;
+									}
+								?>
 							</ul>
 						</li>
                     </ul>

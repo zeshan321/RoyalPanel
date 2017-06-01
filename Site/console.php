@@ -25,6 +25,7 @@ if (!isset($_SESSION['login'])) {
 
         <!-- custom css -->
         <link href='assets/css/home.css' rel='stylesheet' type='text/css'>
+        <link href='assets/css/console.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/notification.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/animate.css' rel='stylesheet' type='text/css'>
 
@@ -34,22 +35,22 @@ if (!isset($_SESSION['login'])) {
     </head>
 
     <body>
-		<!-- Notifications start -->
+        <!-- Notifications start -->
         <div class="container">
             <div class="row">
                 <div class="com-md-12">
                     <div class="notification alert alert-danger error-change" role="alert">
                         <span class="fa fa-minus-circle"></span> Invalid password!
                     </div>
-					
-					<div class="notification alert alert-success changed">
-						<span class="fa fa-check-circle"></span> Successfully changed password!
-					</div>
+
+                    <div class="notification alert alert-success changed">
+                        <span class="fa fa-check-circle"></span> Successfully changed password!
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Notifications end -->
-		
+
         <div id="navbar-wrapper">
             <header>
                 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -112,8 +113,8 @@ if (!isset($_SESSION['login'])) {
 								<span class="sidebar-title">Stats</span>
 							</a>
                         </li>
-						<li>
-							<a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu">
+                        <li>
+                            <a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu">
 								<span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
 								<span class="sidebar-title">Console</span>
 								<b class="caret"></b>
@@ -128,7 +129,7 @@ if (!isset($_SESSION['login'])) {
 									}
 								?>
 							</ul>
-						</li>
+                        </li>
                     </ul>
                 </aside>
             </div>
@@ -175,16 +176,191 @@ if (!isset($_SESSION['login'])) {
 
             <!-- main -->
             <main id="page-content-wrapper" role="main">
-
+                <div class="container">
+                    <div class="row">
+                        <h3 id="serverName" class="text-center">Server name</h3>
+                        <br /><br />
+                        <div class="col-md-8">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    Console
+                                </div>
+                                <div id="console" class="panel-body">
+                                    <ul id="consoleData" class="media-list">
+									
+                                    </ul>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Send message or command" />
+                                        <span class="input-group-btn">
+                                        <button class="btn btn-info" type="button">Send</button>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    Online users
+                                </div>
+                                <div id="players" class="panel-body">
+                                    <ul id="playerData" class="media-list">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    Status
+                                </div>
+                                <div id="players" class="panel-body">
+                                    <ul id="statusData" class="media-list">
+										<li>
+											<b>Ram Usage:</b>
+											<div class="progress">
+											  <div id="ram" class="progress-bar progress-bar-danger active" role="progressbar" aria-valuenow="20" aria-valuemin="10" aria-valuemax="10" style="width: 0%">
+											   0%
+											  </div>
+											</div>
+										</li>
+										
+										<li>
+											<b>TPS:</b>
+											<div class="progress">
+											  <div id="tps" class="progress-bar progress-bar-danger active" role="progressbar" aria-valuenow="20" aria-valuemin="10" aria-valuemax="10" style="width: 0%">
+											   0
+											  </div>
+											</div>
+										</li>
+										
+										<li>
+											<b>CPU:</b>
+											<div class="progress">
+											  <div id="cpu" class="progress-bar progress-bar-danger active" role="progressbar" aria-valuenow="20" aria-valuemin="10" aria-valuemax="10" style="width: 0%">
+											   0%
+											  </div>
+											</div>
+										</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </main>
-        </div>
+            </div>
 
-        <!-- cdn js -->
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="assets/js/notification.js"></script>
-		
-		<?php
+            <!-- cdn js -->
+            <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+            <script type="text/javascript" src="assets/js/notification.js"></script>
+            <script type="text/javascript" src="assets/js/reconnecting-websocket.min.js"></script>
+			
+			<script>
+				function getParam(name) {
+					name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+					var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+						results = regex.exec(location.search);
+					return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+				}
+				
+				$("#serverName").text(getParam("name"));
+
+				var ip = "ws://" + getParam("ip");
+				
+				var websocket = new ReconnectingWebSocket(ip);
+				websocket.onmessage = function(event) { onMessage(event) };
+				websocket.onclose = function(evt) { onClose(event) };
+				
+				function onClose(event) {
+					$('#playerData').empty();
+				}
+				
+				function onMessage(event) {
+					console.log(event.data);
+					
+					var data = event.data;
+					data = data.replace("<", "[");
+					data = data.replace(">", "]");
+					
+					if (data.startsWith("JOIN: ")) {
+						var username = data.replace("JOIN: ", "");
+						var output="";
+						output += "<li id=\"player-" + username + "\" class=\"media\">";
+						output += "<div class=\"media-body\">";
+						output += "<div class=\"media\">";
+						output += "<a class=\"pull-left\" href=\"#\">";
+						output += "<img class=\"media-object img-circle\" src=\"https:\/\/minotar.net\/avatar\/" + username + "\" \/>";
+						output += "<\/a>";
+						output += "<div class=\"media-body\">";
+						output += "<h5>" + username + "<\/h5>";
+						output += "<\/div>";
+						output += "<\/div>";
+						output += "<\/div>";
+						output += "<\/li>";
+
+
+						$("#playerData").append(output);
+					} else if (event.data.startsWith("LEAVE: ")) {
+						var username = event.data.replace("LEAVE: ", "");
+						
+						$('#player-' + username).remove();
+					} else if (event.data.startsWith("TPS: ")) {
+						var tps = parseInt(event.data.replace("TPS:", ""));
+						var percent = ((tps * 1.0) / 20) * 100;
+						
+						$("#tps").animate({
+							width: percent + "%"
+						}, 1);
+						
+						$("#tps").text(tps);
+					} else if (event.data.startsWith("RAM: ")) {
+						var data = event.data.replace("RAM: ", "");
+						data = data.split(" ");
+						
+						var used = parseInt(data[0]);
+						var total = parseInt(data[1]);
+						var percent = ((used * 1.0) / total) * 100;
+
+						$("#ram").animate({
+							width: percent + "%"
+						}, 1);
+						
+						$("#ram").text(formatBytes(used) + " / " + formatBytes(total));
+					} else if (event.data.startsWith("CPU: ")) {
+						var cpu = parseInt(event.data.replace("CPU:", ""));
+						
+						$("#cpu").animate({
+							width: cpu + "%"
+						}, 1);
+						
+						$("#cpu").text(cpu + "%");
+					} else if (event.data.startsWith("VERIFY")) {
+						websocket.send(<?php echo "'" . $_SESSION['username'] . "<>" . $_SESSION['pass'] . "'"?>);
+					} else {
+						var output="";
+						output += "<li class=\"media\">";
+						output += "<div class=\"media-body\">";
+						output += "<div class=\"media\">";
+						output += "<a class=\"pull-left\" href=\"#\"><\/a>";
+						output += "<div class=\"media-body\" >";
+						output += "<p>" + data + "</p>";
+						output += "<hr\/>";
+						output += "<\/div>";
+						output += "<\/div>";
+						output += "<\/div>";
+						output += "<\/li>";
+						
+						$("#consoleData").append(output);
+					}
+				}
+				
+			function formatBytes(a,b){if(0==a)return"0 Bytes";var c=1e3,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]}
+			</script>
+            <?php
          if (isset($_POST['oldpassword']) && isset($_POST['newpassword'])) {
 			$oldpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['oldpassword']);
          	$newpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['newpassword']);

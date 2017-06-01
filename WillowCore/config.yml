@@ -1,0 +1,8 @@
+# Socket port
+port: 4444
+
+# Databse info
+server: 'localhost'
+user: 'root'
+password: ''
+database: 'royalpanel'
