@@ -330,7 +330,7 @@ if (!isset($_SESSION['login'])) {
 
             <!-- main -->
             <main id="page-content-wrapper" role="main">
-                <div class="container-fluid">
+                <div class="container">
                     <input id="filter" type="text" class="form-control" placeholder="Search">
 					
 					<br>

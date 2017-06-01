@@ -77,8 +77,8 @@
 						
 			if (login($user, $pass)) {
 				$_SESSION['login'] = true;
-				$_SESSION['username']= $user;
-				$_SESSION['pass']= $pass;
+				$_SESSION['username'] = $user;
+				$_SESSION['pass'] = $pass;
 				
 				showNoti("logedin");
 				header("location: index");

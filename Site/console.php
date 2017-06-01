@@ -84,7 +84,7 @@ if (!isset($_SESSION['login'])) {
                 <aside id="sidebar">
                     <ul id="sidemenu" class="sidebar-nav">
                         <li>
-                            <a href="index.php" id="selected">
+                            <a href="index.php">
 								<span class="sidebar-icon"><i class="fa fa-home"></i></span>
 								<span class="sidebar-title">Home</span>
 							</a>
@@ -114,7 +114,7 @@ if (!isset($_SESSION['login'])) {
 							</a>
                         </li>
                         <li>
-                            <a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu">
+                            <a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu" id="selected">
 								<span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
 								<span class="sidebar-title">Console</span>
 								<b class="caret"></b>

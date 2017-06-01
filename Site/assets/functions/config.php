@@ -7,7 +7,7 @@ $db_name='royalpanel';
 
 // Servers
 $server_names = array("Factions", "Skywars");
-$server_address = array("localhost:26267", "localhost:26268");
+$server_address = array("99.244.112.35:4444", "localhost:26268");
 
 // Do not touch
 $con = mysqli_connect($server, $db_user, $db_pwd, $db_name) //connect to the database server
