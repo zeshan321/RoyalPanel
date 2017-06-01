@@ -1,6 +1,5 @@
 package com.zeshanaslam.willowcore;
 
-import com.sun.management.OperatingSystemMXBean;
 import com.zeshanaslam.willowcore.connection.SQL;
 import com.zeshanaslam.willowcore.connection.Socket;
 import com.zeshanaslam.willowcore.utils.System;
@@ -9,21 +8,22 @@ import org.apache.logging.log4j.core.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import javax.management.MBeanServerConnection;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 
 public class Main extends JavaPlugin {
 
     public static Socket socket;
     public static SQL sql;
     public static ConfigLoader config;
+    public static Main plugin;
 
     public int tps;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+
+        plugin = this;
 
         // Load config
         config = new ConfigLoader(this);

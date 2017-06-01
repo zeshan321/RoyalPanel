@@ -38,6 +38,20 @@ public class Socket extends WebSocketServer {
 
         if (isValid) {
             message = ChatColor.translateAlternateColorCodes('&', message);
+
+            if (message.startsWith("COMMAND: ")) {
+                message = message.replace("COMMAND: ", "");
+
+                if (message.startsWith("/")) {
+                    message = message.replaceFirst("/", "");
+
+                    String finalMessage = message;
+                    Bukkit.getScheduler().runTask(Main.plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalMessage));
+                } else {
+                    String finalMessage = message;
+                    Bukkit.getScheduler().runTask(Main.plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "say " + finalMessage));
+                }
+            }
         } else {
             String[] info = message.split("<>");
 
@@ -61,7 +75,7 @@ public class Socket extends WebSocketServer {
     }
 
     public void sendMessage(String message) {
-        for (WebSocket socket: connections.keySet()) {
+        for (WebSocket socket : connections.keySet()) {
             if (connections.get(socket)) {
                 socket.send(message);
             } else {

@@ -192,9 +192,9 @@ if (!isset($_SESSION['login'])) {
                                 </div>
                                 <div class="panel-footer">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Send message or command" />
+                                        <input id="commandLine" type="text" class="form-control" placeholder="Send message or command" />
                                         <span class="input-group-btn">
-                                        <button class="btn btn-info" type="button">Send</button>
+                                        <button class="btn btn-info" type="button" onclick="runCommand();">Send</button>
                                     </span>
                                     </div>
                                 </div>
@@ -277,7 +277,29 @@ if (!isset($_SESSION['login'])) {
 				
 				function onClose(event) {
 					$('#playerData').empty();
+					
+					// Reset tps
+					$("#tps").animate({
+							width: "0%"
+						}, 1);
+						
+					$("#tps").text('0');
+					
+					// Reset ram
+					$("#ram").animate({
+						width: "0%"
+					}, 1);
+						
+					$("#ram").text("0 / 0");
+					
+					// Reset CPU
+					$("#cpu").animate({
+							width: "0%"
+						}, 1);
+						
+					$("#cpu").text('0%');
 				}
+				
 				
 				function onMessage(event) {
 					console.log(event.data);
@@ -358,7 +380,17 @@ if (!isset($_SESSION['login'])) {
 					}
 				}
 				
-			function formatBytes(a,b){if(0==a)return"0 Bytes";var c=1e3,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]}
+				function runCommand() {
+					var value = $("#commandLine").val(); 
+
+					if (value != "") {
+						$("#commandLine").val(""); 
+						
+						websocket.send("COMMAND: " + value);
+					}
+				}
+				
+				function formatBytes(a,b){if(0==a)return"0 Bytes";var c=1e3,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]}
 			</script>
             <?php
          if (isset($_POST['oldpassword']) && isset($_POST['newpassword'])) {
