@@ -124,7 +124,7 @@ if (!isset($_SESSION['login'])) {
 									$index = 0;
 									
 									foreach ($server_names as $server) {
-										echo "<li><a href=\"console.php?name=". $server . "&ip=" . $server_address[$index] ."\"><i class=\"fa fa-caret-right\"></i>" .  $server . "</a></li>";
+										echo "<li><a href=\"console.php?name=". $server . "&id=" . $index ."\"><i class=\"fa fa-caret-right\"></i>" .  $server . "</a></li>";
 										$index = $index + 1;
 									}
 								?>
@@ -170,6 +170,39 @@ if (!isset($_SESSION['login'])) {
                                 </div>
                             </div>
                             </form>
+                    </div>
+                </div>
+            </div>
+			
+            <!-- global console modal -->
+            <!-- line modal -->
+            <div class="modal fade" id="globalConsole" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                            <h3 class="modal-title" id="lineModalLabel">Broadcaster</h3>
+                        </div>
+                            <div class="modal-body">
+
+                                <!-- content goes here -->
+                                    <div class="form-group">
+                                        <label >Command or message:</label>
+                                        <input type="text" class="form-control" id="globalinput" placeholder="Send command or message">
+                                    </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal" role="button">Close</button>
+                                    </div>
+
+                                    <div class="btn-group" role="group">
+                                        <button onClick="runGlobalCommand();" class="btn btn-default btn-hover-green">Send</button>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -250,6 +283,8 @@ if (!isset($_SESSION['login'])) {
                         </div>
                     </div>
                 </div>
+				
+				<button type="button" data-toggle="modal" data-target="#globalConsole" class="btn btn-circle btn-xl"><i class="fa fa-globe"></i></button>
             </main>
             </div>
 
@@ -260,6 +295,8 @@ if (!isset($_SESSION['login'])) {
             <script type="text/javascript" src="assets/js/reconnecting-websocket.min.js"></script>
 			
 			<script>
+				var servers = <?php echo json_encode($server_address) ?>;
+
 				function getParam(name) {
 					name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 					var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -269,7 +306,7 @@ if (!isset($_SESSION['login'])) {
 				
 				$("#serverName").text(getParam("name"));
 
-				var ip = "ws://" + getParam("ip");
+				var ip = "ws://" + servers[parseInt(getParam("id"))];
 				
 				var websocket = new ReconnectingWebSocket(ip);
 				websocket.onmessage = function(event) { onMessage(event) };
@@ -387,6 +424,31 @@ if (!isset($_SESSION['login'])) {
 						$("#commandLine").val(""); 
 						
 						websocket.send("COMMAND: " + value);
+					}
+				}
+				
+				function runGlobalCommand() {
+					var value = $("#globalinput").val(); 
+
+					if (value != "") {
+						$("#globalinput").val(""); 
+						
+						for (var i = 0; i < servers.length; i++) {
+							if (i.toString() != getParam("id")) {
+								var tempsocket = new ReconnectingWebSocket("ws://" + servers[i]);
+								tempsocket.onmessage = function(event) { onTempMessage(event) };
+								
+								function onTempMessage(event) {
+									if (event.data.startsWith("VERIFY")) {
+										tempsocket.send(<?php echo "'" . $_SESSION['username'] . "<>" . $_SESSION['pass'] . "'"?>);
+										tempsocket.send("COMMAND: " + value);
+										tempsocket.close();
+									}
+								}
+							} else {
+								websocket.send("COMMAND: " + value);
+							}
+						}
 					}
 				}
 				

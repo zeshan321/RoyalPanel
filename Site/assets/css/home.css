@@ -150,3 +150,21 @@ body {
 #selected {
     background: #750002 !important;
 }
+
+.btn-circle.btn-xl {
+	width: 70px;
+	height: 70px;
+	font-size: 24px;
+	border-radius: 35px;
+	position: fixed;
+	bottom: 15px;
+	right: 15px;
+	color: #fff !important;
+	background: #AF2326 !important;
+	margin-bottom: 5px;
+	margin-right: 5px;
+}
+
+.btn-circle.btn-xl:hover {
+	background: #750002 !important;
+}
