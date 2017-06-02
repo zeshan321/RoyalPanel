@@ -102,9 +102,9 @@ if (!isset($_SESSION['login'])) {
 							</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="bans.php">
 								<span class="sidebar-icon"><i class="fa fa-book"></i></span>
-								<span class="sidebar-title">Logs</span>
+								<span class="sidebar-title">Bans</span>
 							</a>
                         </li>
                         <li>
@@ -211,7 +211,7 @@ if (!isset($_SESSION['login'])) {
             <main id="page-content-wrapper" role="main">
                 <div class="container">
                     <div class="row">
-                        <h3 id="serverName" class="text-center">Server name</h3>
+                        <h1 id="serverName" class="text-center">Server name</h1>
                         <br /><br />
                         <div class="col-md-8">
                             <div class="panel panel-primary">

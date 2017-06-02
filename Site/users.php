@@ -126,9 +126,9 @@ if (!isset($_SESSION['login'])) {
 							</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="bans.php">
 								<span class="sidebar-icon"><i class="fa fa-book"></i></span>
-								<span class="sidebar-title">Logs</span>
+								<span class="sidebar-title">Bans</span>
 							</a>
                         </li>
                         <li>
