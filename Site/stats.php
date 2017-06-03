@@ -84,7 +84,7 @@ if (!isset($_SESSION['login'])) {
                 <aside id="sidebar">
                     <ul id="sidemenu" class="sidebar-nav">
                         <li>
-                            <a href="index.php" id="selected">
+                            <a href="index.php">
 								<span class="sidebar-icon"><i class="fa fa-home"></i></span>
 								<span class="sidebar-title">Home</span>
 							</a>
@@ -108,7 +108,7 @@ if (!isset($_SESSION['login'])) {
 							</a>
                         </li>
                         <li>
-                            <a href="stats.php">
+                            <a href="stats.php" id="selected">
 								<span class="sidebar-icon"><i class="fa fa-line-chart"></i></span>
 								<span class="sidebar-title">Stats</span>
 							</a>
