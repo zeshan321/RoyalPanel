@@ -132,7 +132,7 @@ if (!isset($_SESSION['login'])) {
 							</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="stats.php">
 								<span class="sidebar-icon"><i class="fa fa-line-chart"></i></span>
 								<span class="sidebar-title">Stats</span>
 							</a>

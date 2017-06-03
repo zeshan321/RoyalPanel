@@ -110,4 +110,19 @@ function getStatValue($stat) {
 	
 	return 0;
 }
+
+function getPlayerCount() {
+	$rows = array();
+	
+	$query = "select * from playercount";
+	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+		
+	if (mysqli_num_rows($result)) {
+		while($row = $result->fetch_assoc()) { 
+			array_push($rows, $row);
+		}
+	}
+	
+	return $rows;
+}
 ?>

@@ -19,6 +19,9 @@ public class SQL {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Default sql queries
+        //clearOldPlayerCount();
     }
 
     public boolean isValidUser(String username, String password) {
@@ -229,6 +232,18 @@ public class SQL {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void clearOldPlayerCount() {
+        try {
+            String query = "DELETE FROM playercount WHERE id ORDER BY id DESC LIMIT -1 OFFSET 10";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

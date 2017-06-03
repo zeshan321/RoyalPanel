@@ -49,7 +49,7 @@ public class PlayerStatsListener implements Listener {
 
             if (!date.equals(current)) {
                 Main.plugin.sql.saveLastJoin(player);
-                Main.plugin.sql.savePlayerCount(date);
+                Main.plugin.sql.savePlayerCount(current);
             }
         } else {
             Main.plugin.sql.saveLastJoin(player);

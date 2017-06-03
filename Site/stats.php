@@ -27,6 +27,7 @@ if (!isset($_SESSION['login'])) {
         <link href='assets/css/home.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/notification.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/animate.css' rel='stylesheet' type='text/css'>
+        <link href='assets/css/console.css' rel='stylesheet' type='text/css'>
 
         <!-- icon -->
         <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" />
@@ -118,8 +119,8 @@ if (!isset($_SESSION['login'])) {
 								<span class="sidebar-title">Console</span>
 								<b class="caret"></b>
 							</a>
-							<ul id="submenu" class="panel-collapse collapse panel-switch" role="menu">
-								<?php
+                            <ul id="submenu" class="panel-collapse collapse panel-switch" role="menu">
+                                <?php
 									$index = 0;
 									
 									foreach ($server_names as $server) {
@@ -127,7 +128,7 @@ if (!isset($_SESSION['login'])) {
 										$index = $index + 1;
 									}
 								?>
-							</ul>
+                            </ul>
                         </li>
                     </ul>
                 </aside>
@@ -177,57 +178,20 @@ if (!isset($_SESSION['login'])) {
             <main id="page-content-wrapper" role="main">
                 <div class="container">
                     <div class="row">
-                        <h1 id="serverName" class="text-center">Your stats</h1>
-
-                        <section id="counter" class="counter">
-                            <div class="main_counter_area">
-                                <div class="overlay p-y-3">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="main_counter_content text-center white-text wow fadeInUp">
-                                                <div class="col-md-3">
-                                                    <div class="single_counter p-y-2 m-t-1">
-                                                        <i class="fa fa-sign-in m-b-1"></i>
-                                                        <h2 class="statistic-counter"><?php echo getStatValue("LOGIN"); ?></h2>
-                                                        <p>Total logins</p>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="single_counter p-y-2 m-t-1">
-                                                        <i class="fa fa-calendar-o m-b-1"></i>
-                                                        <h2 class="statistic-counter"><?php echo getStatValue("PLAY_TIME"); ?></h2>
-                                                        <p>Minutes played</p>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="single_counter p-y-2 m-t-1">
-                                                        <i class="fa fa-gavel m-b-1"></i>
-                                                        <h2 class="statistic-counter"><?php echo getStatValue("PUNISHMENTS"); ?></h2>
-                                                        <p>Total punishments</p>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="single_counter p-y-2 m-t-1">
-                                                        <i class="fa fa-comments m-b-1"></i>
-                                                        <h2 class="statistic-counter"><?php echo getStatValue("MESSAGES_SENT"); ?></h2>
-                                                        <p>Messages sent</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <h1 id="serverName" class="text-center">Network stats</h1>
+                        <br /><br />
+                        <div class="col-md-15">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    Daily unique players
+                                </div>
+                                <div id="console" class="panel-body">
+                                    <div id="chart_div" style="width: 100%; min-height: 400px;"></div>
                                 </div>
                             </div>
-
-                            <div class="navbar navbar-default navbar-bottom footer">
-                                <div class="container">
-                                    <p class="navbar-text pull-left">NOTICE: Willow is not to be shared with non-staff members, leaking will result in a demotion. All usage is monitored.</p>
-                                </div>
-                            </div>
-                        </section>
-
-                    </div>
+                        </div>
                 </div>
+				</div>
             </main>
         </div>
 
@@ -235,7 +199,49 @@ if (!isset($_SESSION['login'])) {
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script type="text/javascript" src="assets/js/notification.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
+            google.charts.setOnLoadCallback(drawChart);
 
+            function drawChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Date');
+                data.addColumn('number', 'Players');
+
+                <?php
+			  $index = 0;
+			  $array = getPlayerCount();
+			  
+			  echo "data.addRows(". count($array) .");";
+				foreach ($array as $row) {
+					
+					echo "data.setValue(" . $index . ", 0, '" . $row["countdate"] . "');";
+					echo "data.setValue(" . $index . ", 1, " . $row["playercount"] . ");";
+
+					$index = $index + 1;
+				}
+			  ?>
+
+                var options = {
+                    title: 'Daily unique players',
+                    hAxis: {
+                        title: 'Players',
+                        titleTextStyle: {
+                            color: '#333'
+                        }
+                    },
+                    vAxis: {
+                        minValue: 0
+                    }
+                };
+
+                var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+        </script>
         <?php
          if (isset($_POST['oldpassword']) && isset($_POST['newpassword'])) {
 			$oldpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['oldpassword']);
