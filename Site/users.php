@@ -149,7 +149,7 @@ if (!isset($_SESSION['login'])) {
 									$index = 0;
 									
 									foreach ($server_names as $server) {
-										echo "<li><a href=\"console.php?name=". $server . "&ip=" . $server_address[$index] ."\"><i class=\"fa fa-caret-right\"></i>" .  $server . "</a></li>";
+										echo "<li><a href=\"console.php?name=". $server . "&id=" . $index ."\"><i class=\"fa fa-caret-right\"></i>" .  $server . "</a></li>";
 										$index = $index + 1;
 									}
 								?>

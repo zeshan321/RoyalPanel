@@ -2,6 +2,8 @@ package com.zeshanaslam.willowcore;
 
 import com.zeshanaslam.willowcore.connection.SQL;
 import com.zeshanaslam.willowcore.connection.Socket;
+import com.zeshanaslam.willowcore.statistics.PlayerStatsListener;
+import com.zeshanaslam.willowcore.statistics.PlayerStatsManager;
 import com.zeshanaslam.willowcore.utils.System;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
@@ -12,10 +14,11 @@ import java.io.IOException;
 
 public class Main extends JavaPlugin {
 
-    public static Socket socket;
-    public static SQL sql;
-    public static ConfigLoader config;
     public static Main plugin;
+    public Socket socket;
+    public SQL sql;
+    public ConfigLoader config;
+    public PlayerStatsManager playerStatsManager;
 
     public int tps;
 
@@ -29,19 +32,16 @@ public class Main extends JavaPlugin {
         config = new ConfigLoader(this);
 
         // Setup web socket
-        new Thread() {
-            public void run() {
-                socket = new Socket();
-                socket.start();
-            }
-        }.start();
+        new Thread(() -> {
+            socket = new Socket();
+            socket.start();
+        }).start();
 
         // Setup SQL
-        new Thread() {
-            public void run() {
-                sql = new SQL();
-            }
-        }.start();
+        new Thread(() -> {
+            sql = new SQL();
+            playerStatsManager = new PlayerStatsManager();
+        }).start();
 
         // Start console capture
         Logger log = (Logger) LogManager.getRootLogger();
@@ -49,6 +49,7 @@ public class Main extends JavaPlugin {
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new Events(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerStatsListener(), this);
 
         // Send socket server status updates
         new BukkitRunnable() {
@@ -70,6 +71,10 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        // Clear stats
+        playerStatsManager.playTime.clear();
+        playerStatsManager.stats.clear();
+
         // Stop socket
         try {
             socket.stop();

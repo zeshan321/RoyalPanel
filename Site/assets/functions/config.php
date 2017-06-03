@@ -5,6 +5,15 @@ $db_user='root';
 $db_pwd='';
 $db_name='royalpanel';
 
+/*
+
+$server='149.56.242.146';
+$db_user='litebans';
+$db_pwd='4jXQHSBsDRWdvs4rvYMzTe';
+$db_name='Willow';
+
+*/
+
 // Servers
 $server_names = array("Factions", "Skywars");
 $server_address = array("99.244.112.35:4444", "99.244.112.35:4445");

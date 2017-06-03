@@ -13,6 +13,7 @@ function login($user, $pass) {
 		// Store mc username
 		while($row = $result->fetch_assoc()) {
 			$_SESSION['mcuser'] = uuid_to_username($row["uuid"]);
+			$_SESSION['uuid'] = format_uuid($row["uuid"]);
 		}
 		
 		return true;
@@ -92,5 +93,21 @@ function deleteUser($user) {
 	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
 	
 	return $result;
+}
+
+function getStatValue($stat) {
+	$uuid = $_SESSION['uuid'];
+	$query = "select * from stats where uuid='$uuid' and stat='$stat'";
+	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+	
+	if (mysqli_num_rows($result)) {
+
+		while($row = $result->fetch_assoc()) {
+			return $row["statvalue"];
+		}
+		
+	}
+	
+	return 0;
 }
 ?>

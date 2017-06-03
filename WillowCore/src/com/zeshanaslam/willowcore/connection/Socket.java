@@ -16,7 +16,7 @@ public class Socket extends WebSocketServer {
     private HashMap<WebSocket, Boolean> connections;
 
     public Socket() {
-        super(new InetSocketAddress(Main.config.port));
+        super(new InetSocketAddress(Main.plugin.config.port));
         connections = new HashMap<>();
     }
 
@@ -55,7 +55,7 @@ public class Socket extends WebSocketServer {
         } else {
             String[] info = message.split("<>");
 
-            if (Main.sql.isValidUser(info[0], info[1])) {
+            if (Main.plugin.sql.isValidUser(info[0], info[1])) {
                 connections.remove(conn);
                 connections.put(conn, true);
 

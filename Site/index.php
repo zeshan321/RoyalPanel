@@ -118,16 +118,16 @@ if (!isset($_SESSION['login'])) {
 								<span class="sidebar-title">Console</span>
 								<b class="caret"></b>
 							</a>
-                            <ul id="submenu" class="panel-collapse collapse panel-switch" role="menu">
-                                <?php
+							<ul id="submenu" class="panel-collapse collapse panel-switch" role="menu">
+								<?php
 									$index = 0;
 									
 									foreach ($server_names as $server) {
-										echo "<li><a href=\"console.php?name=". $server . "&ip=" . $server_address[$index] ."\"><i class=\"fa fa-caret-right\"></i>" .  $server . "</a></li>";
+										echo "<li><a href=\"console.php?name=". $server . "&id=" . $index ."\"><i class=\"fa fa-caret-right\"></i>" .  $server . "</a></li>";
 										$index = $index + 1;
 									}
 								?>
-                            </ul>
+							</ul>
                         </li>
                     </ul>
                 </aside>
@@ -188,28 +188,28 @@ if (!isset($_SESSION['login'])) {
                                                 <div class="col-md-3">
                                                     <div class="single_counter p-y-2 m-t-1">
                                                         <i class="fa fa-sign-in m-b-1"></i>
-                                                        <h2 class="statistic-counter">100</h2>
+                                                        <h2 class="statistic-counter"><?php echo getStatValue("LOGIN"); ?></h2>
                                                         <p>Total logins</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="single_counter p-y-2 m-t-1">
                                                         <i class="fa fa-calendar-o m-b-1"></i>
-                                                        <h2 class="statistic-counter">400</h2>
-                                                        <p>Total playtime</p>
+                                                        <h2 class="statistic-counter"><?php echo getStatValue("PLAY_TIME"); ?></h2>
+                                                        <p>Minutes played</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="single_counter p-y-2 m-t-1">
                                                         <i class="fa fa-gavel m-b-1"></i>
-                                                        <h2 class="statistic-counter">312</h2>
+                                                        <h2 class="statistic-counter"><?php echo getStatValue("PUNISHMENTS"); ?></h2>
                                                         <p>Total punishments</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="single_counter p-y-2 m-t-1">
                                                         <i class="fa fa-comments m-b-1"></i>
-                                                        <h2 class="statistic-counter">480</h2>
+                                                        <h2 class="statistic-counter"><?php echo getStatValue("MESSAGES_SENT"); ?></h2>
                                                         <p>Messages sent</p>
                                                     </div>
                                                 </div>

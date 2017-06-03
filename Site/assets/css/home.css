@@ -114,6 +114,10 @@ body {
     text-indent: 15px;
 }
 
+#wrapper {
+    padding-left: 225px;
+}
+	
 @media (max-width: 1400px) {
     #wrapper #sidebar-wrapper {
         width: 45px;
@@ -126,6 +130,10 @@ body {
         width: 200px;
         height: 0;
     }
+	
+    #wrapper {
+        padding-left: 0px;
+	}
 }
 
 .sidebar-nav li a {
