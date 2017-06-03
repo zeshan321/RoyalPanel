@@ -10,6 +10,10 @@ if (!isset($_SESSION['login'])) {
 		header("location: login");
 	}
 }
+
+if (!hasPermission("view-stats")) {
+	header("location: index");
+}
 ?>
 
     <!DOCTYPE html>
@@ -90,19 +94,19 @@ if (!isset($_SESSION['login'])) {
 							</a>
                         </li>
                         <li>
-                            <a href="users.php">
+                            <a href="users.php" <?php if (!(hasPermission("view-users"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-users"></i></span>
 								<span class="sidebar-title">Users</span>
 							</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="#" <?php if (!(hasPermission("view-wiki"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
 								<span class="sidebar-title">Wiki</span>
 							</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="#" <?php if (!(hasPermission("view-bans"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-book"></i></span>
 								<span class="sidebar-title">Bans</span>
 							</a>
@@ -114,7 +118,7 @@ if (!isset($_SESSION['login'])) {
 							</a>
                         </li>
                         <li>
-                            <a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu">
+                            <a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu" <?php if (!(hasPermission("console"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
 								<span class="sidebar-title">Console</span>
 								<b class="caret"></b>

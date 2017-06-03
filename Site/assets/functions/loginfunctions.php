@@ -14,6 +14,7 @@ function login($user, $pass) {
 		while($row = $result->fetch_assoc()) {
 			$_SESSION['mcuser'] = uuid_to_username($row["uuid"]);
 			$_SESSION['uuid'] = format_uuid($row["uuid"]);
+			$_SESSION['permissions'] = $row["permissions"];
 		}
 		
 		return true;
@@ -52,36 +53,40 @@ function getAllUsers() {
 }
 
 function createUser($user, $pass, $uuid, $email) {
-	$query = "select * from users where BINARY username='$user'";
-	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
-	
-	if (mysqli_num_rows($result)) {
-		return false;
-	} else {
-		$query = "insert into users (username, password, uuid, email, permissions) VALUES ('$user', '$pass', '$uuid', '$email', '')";
+	if (hasPermission("manage-users")) {
+		$query = "select * from users where BINARY username='$user'";
 		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+		
+		if (mysqli_num_rows($result)) {
+			return false;
+		} else {
+			$query = "insert into users (username, password, uuid, email, permissions) VALUES ('$user', '$pass', '$uuid', '$email', '')";
+			$result = mysqli_query($GLOBALS['con'], $query) or die('error');
 
-		return $result;
+			return $result;
+		}
 	}
 }
 
-function updateUser($user, $pass, $uuid, $email) {
-	$query = "select * from users where BINARY username='$user'";
-	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
-	
-	if (!mysqli_num_rows($result)) {
-		return false;
-	} else {
-		if ($pass == "") {
-			$query = "update users SET uuid='$uuid', email='$email' where username='$user'";
-			$result = mysqli_query($GLOBALS['con'], $query) or die('error');
-			
-			return $result;
+function updateUser($user, $pass, $uuid, $email, $permissions) {
+	if (hasPermission("manage-users")) {
+		$query = "select * from users where BINARY username='$user'";
+		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+		
+		if (!mysqli_num_rows($result)) {
+			return false;
 		} else {
-			$query = "update users SET password='$pass', uuid='$uuid', email='$email' where username='$user'";
-			$result = mysqli_query($GLOBALS['con'], $query) or die('error');
-			
-			return $result;
+			if ($pass == "") {
+				$query = "update users SET uuid='$uuid', email='$email', permissions='$permissions' where username='$user'";
+				$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+				
+				return $result;
+			} else {
+				$query = "update users SET password='$pass', uuid='$uuid', email='$email', permissions='$permissions' where username='$user'";
+				$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+				
+				return $result;
+			}
 		}
 	}
 	
@@ -89,10 +94,14 @@ function updateUser($user, $pass, $uuid, $email) {
 }
 
 function deleteUser($user) {
-	$query = "delete from users where BINARY username='$user'";
-	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+	if (hasPermission("manage-users")) {
+		$query = "delete from users where BINARY username='$user'";
+		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+		
+		return $result;
+	}
 	
-	return $result;
+	return false;
 }
 
 function getStatValue($stat) {
@@ -124,5 +133,13 @@ function getPlayerCount() {
 	}
 	
 	return $rows;
+}
+
+function hasPermission($permissions) {
+	if(strpos($_SESSION['permissions'], $permissions) !== false) {
+		return true;
+	}
+	
+	return false;
 }
 ?>

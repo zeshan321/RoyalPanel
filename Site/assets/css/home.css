@@ -209,3 +209,9 @@ body {
 .main_counter_area .main_counter_content .single_counter i{
     font-size:36px;
 }
+
+#disabled {
+    pointer-events: none !important;
+	cursor:not-allowed;
+    opacity: 0.2 !important;
+}

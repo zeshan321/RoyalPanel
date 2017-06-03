@@ -34,7 +34,13 @@ public class SQL {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) return true;
+            while (resultSet.next()) {
+                if (resultSet.getString("permissions").contains("console")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

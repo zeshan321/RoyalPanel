@@ -10,6 +10,10 @@ if (!isset($_SESSION['login'])) {
 		header("location: login");
 	}
 }
+
+if (!hasPermission("view-users")) {
+	header("location: index");
+}
 ?>
 
     <!DOCTYPE html>
@@ -120,26 +124,26 @@ if (!isset($_SESSION['login'])) {
 							</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="#" <?php if (!(hasPermission("view-wiki"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
 								<span class="sidebar-title">Wiki</span>
 							</a>
                         </li>
                         <li>
-                            <a href="bans.php">
+                            <a href="bans.php" <?php if (!(hasPermission("view-bans"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-book"></i></span>
 								<span class="sidebar-title">Bans</span>
 							</a>
                         </li>
                         <li>
-                            <a href="stats.php">
+                            <a href="stats.php" <?php if (!(hasPermission("view-stats"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-line-chart"></i></span>
 								<span class="sidebar-title">Stats</span>
 							</a>
                         </li>
 						
 						<li>
-							<a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu">
+							<a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu" <?php if (!(hasPermission("console"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
 								<span class="sidebar-title">Console</span>
 								<b class="caret"></b>
@@ -276,6 +280,34 @@ if (!isset($_SESSION['login'])) {
                                         <label for="addemail">Email</label>
                                         <input type="email" class="form-control" name="editemail" placeholder="Enter email" required>
                                     </div>
+                                    <div class="form-group">
+                                        <label>Permissions</label>
+										<div class="checkbox">
+										  <label><input type="checkbox" name="console" value="console">Console</label>
+										</div>
+										
+										<div class="checkbox">
+										  <label><input type="checkbox" name="view-users" value="view-users">View users</label>
+										</div>
+										
+										<div class="checkbox">
+										  <label><input type="checkbox" name="manage-users" value="manage-users">Manage users</label>
+										</div>
+										
+										<div class="checkbox">
+										  <label><input type="checkbox" name="view-stats" value="view-stats">View stats</label>
+										</div>
+										
+										<div class="checkbox">
+										  <label><input type="checkbox" name="view-wiki" value="manage-users">View wiki</label>
+										</div>
+										
+										<div class="checkbox">
+										  <label><input type="checkbox" name="view-bans" value="manage-users">View bans</label>
+										</div>
+										
+										<p>User needs to relog for permissions to update.</p>
+                                    </div>
                             </div>
                             <div class="modal-footer">
                                 <div class="btn-group btn-group-justified" role="group" aria-label="group button">
@@ -340,7 +372,11 @@ if (!isset($_SESSION['login'])) {
                                 <th>Username</th>
                                 <th>MC Username</th>
                                 <th>Email</th>
-                                <th>Actions</th>
+								<?php
+								if (hasPermission("manage-users")) {
+									echo "<th>Actions</th>";
+								}
+								?>
                             </tr>
                         </thead>
                         <tbody class="searchable">
@@ -352,7 +388,11 @@ if (!isset($_SESSION['login'])) {
 									echo "<td>". $row["username"] . "</td>";
 									echo "<td> " . $ingameName . "</td>";
 									echo "<td>". $row["email"] . "</td>";
-									echo "<td><a class=\"btn btn-info btn-xs\" onclick=\"editUser('" . $row["username"] . "', '" . $ingameName ."', '" . $row["email"] . "');\" href=\"#\"><span class=\"fa fa-pencil\"></span> Edit</a> <a onclick=\"deleteUser('" . $row["username"] . "');\" href=\"#\" class=\"btn btn-danger btn-xs\"><span class=\"fa fa-trash\"></span> Delete</a></td>";
+									
+									if (hasPermission("manage-users")) {
+										echo "<td><a class=\"btn btn-info btn-xs\" onclick=\"editUser('" . $row["username"] . "', '" . $ingameName ."', '" . $row["email"] . "', '" . $row["permissions"] ."');\" href=\"#\"><span class=\"fa fa-pencil\"></span> Edit</a> <a onclick=\"deleteUser('" . $row["username"] . "');\" href=\"#\" class=\"btn btn-danger btn-xs\"><span class=\"fa fa-trash\"></span> Delete</a></td>";
+									}
+									
 									echo "</tr>";
 								}
 							?>
@@ -360,7 +400,11 @@ if (!isset($_SESSION['login'])) {
                     </table>
                 </div>
 				
-				<button type="button" data-toggle="modal" data-target="#addUser" class="btn btn-circle btn-xl"><i class="fa fa-plus"></i></button>
+				<?php
+					if (hasPermission("manage-users")) {
+						echo "<button type=\"button\" data-toggle=\"modal\" data-target=\"#addUser\" class=\"btn btn-circle btn-xl\"><i class=\"fa fa-plus\"></i></button>";
+					}
+				?>
             </main>
         </div>
 
@@ -387,11 +431,35 @@ if (!isset($_SESSION['login'])) {
 
 			});
 			
-			function editUser(username, ingame, email) {
+			function editUser(username, ingame, email, permissions) {
 				$('input[name="editusernamehide"]').val(username);
 				$('input[name="editusername"]').val(username);
 				$('input[name="editmcusername"]').val(ingame);
 				$('input[name="editemail"]').val(email);
+				
+				if (permissions.indexOf("console") >= 0) {
+					$('input[name="console"]').prop('checked', true);
+				}
+				
+				if (permissions.indexOf("manage-users") >= 0) {
+					$('input[name="manage-users"]').prop('checked', true);
+				}
+				
+				if (permissions.indexOf("view-users") >= 0) {
+					$('input[name="view-users"]').prop('checked', true);
+				}
+				
+				if (permissions.indexOf("view-stats") >= 0) {
+					$('input[name="view-stats"]').prop('checked', true);
+				}
+				
+				if (permissions.indexOf("view-bans") >= 0) {
+					$('input[name="view-bans"]').prop('checked', true);
+				}
+				
+				if (permissions.indexOf("view-wiki") >= 0) {
+					$('input[name="view-wiki"]').prop('checked', true);
+				}
 				
 				$('#editUser').modal('show');
 			}
@@ -445,8 +513,37 @@ if (!isset($_SESSION['login'])) {
 			 $pass = mysqli_real_escape_string($GLOBALS['con'], $_POST['editpassword']);
 			 $uuid = mysqli_real_escape_string($GLOBALS['con'], username_to_uuid($_POST['editmcusername']));
 			 $email = mysqli_real_escape_string($GLOBALS['con'], $_POST['editemail']);
-
-			 if (updateUser($user, $pass, $uuid, $email)) {
+			 
+			 $permissions = "";
+			 if (isset($_POST['console'])) {
+				 $permissions = $permissions . "console ";
+			 }
+			 
+			 if (isset($_POST['manage-users'])) {
+				 $permissions = $permissions . "manage-users ";
+			 }
+			 
+			 if (isset($_POST['view-users'])) {
+				 $permissions = $permissions . "view-users ";
+			 }
+			 
+			 if (isset($_POST['view-stats'])) {
+				 $permissions = $permissions . "view-stats ";
+			 }
+			 
+			 if (isset($_POST['view-bans'])) {
+				 $permissions = $permissions . "view-bans ";
+			 }
+			 
+			 if (isset($_POST['view-wiki'])) {
+				 $permissions = $permissions . "view-wiki ";
+			 }
+			 
+			 if ($permissions == "") {
+				 $permissions = "none";
+			 }
+			 
+			 if (updateUser($user, $pass, $uuid, $email, $permissions)) {
 				 showNoti("updated");
 			 } else {
 				 showNoti("error-update");
