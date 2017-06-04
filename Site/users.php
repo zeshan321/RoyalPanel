@@ -13,7 +13,7 @@ if (!isset($_SESSION['login'])) {
 
 // Check for password change and update permissions
 if (!login($_SESSION['username'], $_SESSION['passw'])) {
-	header("location: login");
+	header("location: logout");
 }
 
 if (!hasPermission("view-users")) {
@@ -287,29 +287,56 @@ if (!hasPermission("view-users")) {
                                     </div>
                                     <div class="form-group">
                                         <label>Permissions</label>
-										<div class="checkbox">
-										  <label><input type="checkbox" name="console" value="console">Console</label>
-										</div>
-										
-										<div class="checkbox">
-										  <label><input type="checkbox" name="view-users" value="view-users">View users</label>
-										</div>
-										
-										<div class="checkbox">
-										  <label><input type="checkbox" name="manage-users" value="manage-users">Manage users</label>
-										</div>
-										
-										<div class="checkbox">
-										  <label><input type="checkbox" name="view-stats" value="view-stats">View stats</label>
-										</div>
-										
-										<div class="checkbox">
-										  <label><input type="checkbox" name="view-wiki" value="manage-users">View wiki</label>
-										</div>
-										
-										<div class="checkbox">
-										  <label><input type="checkbox" name="view-bans" value="manage-users">View bans</label>
-										</div>
+
+										<ul class="list-group">
+											<li class="list-group-item">
+												Console Access
+												<div class="material-switch pull-right">
+													<input id="console" name="console" type="checkbox"/>
+													<label for="console" class="label-danger"></label>
+												</div>
+											</li>
+											
+											<li class="list-group-item">
+												View Users
+												<div class="material-switch pull-right">
+													<input id="view-users" name="view-users" type="checkbox"/>
+													<label for="view-users" class="label-danger"></label>
+												</div>
+											</li>
+											
+											<li class="list-group-item">
+												Manage Users
+												<div class="material-switch pull-right">
+													<input id="manage-users" name="manage-users" type="checkbox"/>
+													<label for="manage-users" class="label-danger"></label>
+												</div>
+											</li>
+											
+											<li class="list-group-item">
+												View Stats
+												<div class="material-switch pull-right">
+													<input id="view-stats" name="view-stats" type="checkbox"/>
+													<label for="view-stats" class="label-danger"></label>
+												</div>
+											</li>
+											
+											<li class="list-group-item">
+												View Bans
+												<div class="material-switch pull-right">
+													<input id="view-bans" name="view-bans" type="checkbox"/>
+													<label for="view-bans" class="label-danger"></label>
+												</div>
+											</li>
+											
+											<li class="list-group-item">
+												View Wiki
+												<div class="material-switch pull-right">
+													<input id="view-wiki" name="view-wiki" type="checkbox"/>
+													<label for="view-wiki" class="label-danger"></label>
+												</div>
+											</li>
+										</ul>
                                     </div>
                             </div>
                             <div class="modal-footer">
