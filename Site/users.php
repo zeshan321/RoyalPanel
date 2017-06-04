@@ -11,6 +11,11 @@ if (!isset($_SESSION['login'])) {
 	}
 }
 
+// Check for password change and update permissions
+if (!login($_SESSION['username'], $_SESSION['passw'])) {
+	header("location: login");
+}
+
 if (!hasPermission("view-users")) {
 	header("location: index");
 }
@@ -305,8 +310,6 @@ if (!hasPermission("view-users")) {
 										<div class="checkbox">
 										  <label><input type="checkbox" name="view-bans" value="manage-users">View bans</label>
 										</div>
-										
-										<p>User needs to relog for permissions to update.</p>
                                     </div>
                             </div>
                             <div class="modal-footer">

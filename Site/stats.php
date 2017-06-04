@@ -11,6 +11,11 @@ if (!isset($_SESSION['login'])) {
 	}
 }
 
+// Check for password change and update permissions
+if (!login($_SESSION['username'], $_SESSION['passw'])) {
+	header("location: login");
+}
+
 if (!hasPermission("view-stats")) {
 	header("location: index");
 }

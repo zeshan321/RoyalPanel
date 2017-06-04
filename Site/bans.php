@@ -10,6 +10,11 @@ if (!isset($_SESSION['login'])) {
 		header("location: login");
 	}
 }
+
+// Check for password change and update permissions
+if (!login($_SESSION['username'], $_SESSION['passw'])) {
+	header("location: login");
+}
 ?>
 
     <!DOCTYPE html>
