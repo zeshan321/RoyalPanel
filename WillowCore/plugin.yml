@@ -1,3 +1,4 @@
 name: WillowCore
 main: com.zeshanaslam.willowcore.Main
 version: 1.0.0
+load: STARTUP
