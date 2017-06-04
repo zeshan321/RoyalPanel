@@ -336,6 +336,30 @@ if (!hasPermission("view-users")) {
 													<label for="view-wiki" class="label-danger"></label>
 												</div>
 											</li>
+											
+											<li class="list-group-item">
+												Create Pages
+												<div class="material-switch pull-right">
+													<input id="create-pages" name="create-pages" type="checkbox"/>
+													<label for="create-pages" class="label-danger"></label>
+												</div>
+											</li>
+											
+											<li class="list-group-item">
+												Edit Pages
+												<div class="material-switch pull-right">
+													<input id="edit-pages" name="edit-pages" type="checkbox"/>
+													<label for="edit-pages" class="label-danger"></label>
+												</div>
+											</li>
+											
+											<li class="list-group-item">
+												Delete Pages
+												<div class="material-switch pull-right">
+													<input id="delete-pages" name="delete-pages" type="checkbox"/>
+													<label for="delete-pages" class="label-danger"></label>
+												</div>
+											</li>
 										</ul>
                                     </div>
                             </div>
@@ -491,6 +515,18 @@ if (!hasPermission("view-users")) {
 					$('input[name="view-wiki"]').prop('checked', true);
 				}
 				
+				if (permissions.indexOf("create-pages") >= 0) {
+					$('input[name="create-pages"]').prop('checked', true);
+				}
+				
+				if (permissions.indexOf("edit-pages") >= 0) {
+					$('input[name="edit-pages"]').prop('checked', true);
+				}
+				
+				if (permissions.indexOf("delete-pages") >= 0) {
+					$('input[name="delete-pages"]').prop('checked', true);
+				}
+				
 				$('#editUser').modal('show');
 			}
 			
@@ -567,6 +603,18 @@ if (!hasPermission("view-users")) {
 			 
 			 if (isset($_POST['view-wiki'])) {
 				 $permissions = $permissions . "view-wiki ";
+			 }
+			 
+			 if (isset($_POST['create-pages'])) {
+				 $permissions = $permissions . "create-pages ";
+			 }
+			 
+			 if (isset($_POST['edit-pages'])) {
+				 $permissions = $permissions . "edit-pages ";
+			 }
+			 
+			 if (isset($_POST['delete-pages'])) {
+				 $permissions = $permissions . "delete-pages ";
 			 }
 			 
 			 if ($permissions == "") {
