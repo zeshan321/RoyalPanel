@@ -41,17 +41,13 @@ function changePassword($user, $pass, $newPass) {
 
 function getAllUsers() {
 	$rows = array();
-	
-	if ($_SESSION['login'] == true) {
-		// perm check
 		
-		$query = "select * from users";
-		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+	$query = "select * from users";
+	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
 		
-		if (mysqli_num_rows($result)) {
-			while($row = $result->fetch_assoc()) { 
-				array_push($rows, $row);
-			}
+	if (mysqli_num_rows($result)) {
+		while($row = $result->fetch_assoc()) { 
+			array_push($rows, $row);
 		}
 	}
 	
@@ -150,5 +146,20 @@ function hasPermission($permissions) {
 	}
 	
 	return false;
+}
+
+function getWikiPages() {
+	$rows = array();
+		
+	$query = "select * from wiki";
+	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+		
+	if (mysqli_num_rows($result)) {
+		while($row = $result->fetch_assoc()) { 
+			array_push($rows, $row);
+		}
+	}
+	
+	return $rows;
 }
 ?>

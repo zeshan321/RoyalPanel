@@ -105,7 +105,7 @@ if (!hasPermission("view-stats")) {
 							</a>
                         </li>
                         <li>
-                            <a href="#" <?php if (!(hasPermission("view-wiki"))) { echo "id=\"disabled\""; }?>>
+                            <a href="mwiki.php" <?php if (!(hasPermission("view-wiki"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
 								<span class="sidebar-title">Wiki</span>
 							</a>

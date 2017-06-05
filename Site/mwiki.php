@@ -15,6 +15,10 @@ if (!isset($_SESSION['login'])) {
 if (!login($_SESSION['username'], $_SESSION['passw'])) {
 	header("location: logout");
 }
+
+if (!hasPermission("view-wiki")) {
+	header("location: index");
+}
 ?>
 
     <!DOCTYPE html>
@@ -30,9 +34,9 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
 
         <!-- custom css -->
         <link href='assets/css/home.css' rel='stylesheet' type='text/css'>
+        <link href='assets/css/users.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/notification.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/animate.css' rel='stylesheet' type='text/css'>
-        <link href='assets/css/bans.css' rel='stylesheet' type='text/css'>
 
         <!-- icon -->
         <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" />
@@ -40,22 +44,22 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
     </head>
 
     <body>
-		<!-- Notifications start -->
+        <!-- Notifications start -->
         <div class="container">
             <div class="row">
                 <div class="com-md-12">
                     <div class="notification alert alert-danger error-change" role="alert">
                         <span class="fa fa-minus-circle"></span> Invalid password!
                     </div>
-					
-					<div class="notification alert alert-success changed">
-						<span class="fa fa-check-circle"></span> Successfully changed password!
-					</div>
+
+                    <div class="notification alert alert-success changed">
+                        <span class="fa fa-check-circle"></span> Successfully changed password!
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Notifications end -->
-		
+
         <div id="navbar-wrapper">
             <header>
                 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -95,19 +99,19 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
 							</a>
                         </li>
                         <li>
-                            <a href="users.php" <?php if (!(hasPermission("view-users"))) { echo "id=\"disabled\""; }?>>
+                            <a href="users.php">
 								<span class="sidebar-icon"><i class="fa fa-users"></i></span>
 								<span class="sidebar-title">Users</span>
 							</a>
                         </li>
                         <li>
-                            <a href="mwiki.php" <?php if (!(hasPermission("view-wiki"))) { echo "id=\"disabled\""; }?>>
+                            <a href="mwiki.php" id="selected">
 								<span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
 								<span class="sidebar-title">Wiki</span>
 							</a>
                         </li>
                         <li>
-                            <a href="bans.php" id="selected">
+                            <a href="bans.php" <?php if (!(hasPermission("view-bans"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-book"></i></span>
 								<span class="sidebar-title">Bans</span>
 							</a>
@@ -118,6 +122,7 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
 								<span class="sidebar-title">Stats</span>
 							</a>
                         </li>
+						
 						<li>
 							<a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu" <?php if (!(hasPermission("console"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
@@ -129,7 +134,7 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
 									$index = 0;
 									
 									foreach ($server_names as $server) {
-										echo "<li><a href=\"console.php?name=". $server . "&ip=" . $server_address[$index] ."\"><i class=\"fa fa-caret-right\"></i>" .  $server . "</a></li>";
+										echo "<li><a href=\"console.php?name=". $server . "&id=" . $index ."\"><i class=\"fa fa-caret-right\"></i>" .  $server . "</a></li>";
 										$index = $index + 1;
 									}
 								?>
@@ -178,10 +183,57 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
                     </div>
                 </div>
             </div>
+			
 
             <!-- main -->
             <main id="page-content-wrapper" role="main">
+                <div class="container">
+                    <input id="filter" type="text" class="form-control" placeholder="Search">
+					
+					<br>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Owner</th>
+								<?php
+								if (hasPermission("edit-page") || hasPermission("delete-page")) {
+									echo "<th>Actions</th>";
+								}
+								?>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+							<?php
+								foreach (getWikiPages() as $row) {									
+									echo "<tr>";
+									echo "<td>". $row["title"] . "</td>";
+									echo "<td>". $row["owner"] . "</td>";
+									
+									if (hasPermission("edit-page") || hasPermission("delete-page")) {
+										echo "<td>";
+										if (hasPermission("edit-page")) {
+											echo "<a class=\"btn btn-info btn-xs\" onclick=\"\" href=\"#\"><span class=\"fa fa-pencil\"></span> Edit</a>";
+										}
+										
+										if (hasPermission("delete-page")) {
+											echo " <a class=\"btn btn-danger btn-xs\" onclick=\"\" href=\"#\"><span class=\"fa fa-pencil\"></span> Delete</a>";
+										}
+										echo "</td>";
+									}
+									
+									echo "</tr>";
+								}
+							?>
+                        </tbody>
+                    </table>
+                </div>
 				
+				<?php
+					if (hasPermission("create-pages")) {
+						echo "<button type=\"button\" data-toggle=\"modal\" data-target=\"#addUser\" class=\"btn btn-circle btn-xl\"><i class=\"fa fa-plus\"></i></button>";
+					}
+				?>
             </main>
         </div>
 
@@ -189,8 +241,7 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script type="text/javascript" src="assets/js/notification.js"></script>
-		
-		<?php
+        <?php
          if (isset($_POST['oldpassword']) && isset($_POST['newpassword'])) {
 			$oldpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['oldpassword']);
          	$newpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['newpassword']);
@@ -205,12 +256,10 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
 				showNoti("error-change");
 			}
 			
-			if (!headers_sent()) {
-				header('Location:'.$_SERVER['PHP_SELF']);
-			 } else {
-				 reloadPage();
-			 }
+			header("location: users");
 		 }
+		 
+		 
 		 ?>
     </body>
 

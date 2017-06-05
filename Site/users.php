@@ -129,7 +129,7 @@ if (!hasPermission("view-users")) {
 							</a>
                         </li>
                         <li>
-                            <a href="#" <?php if (!(hasPermission("view-wiki"))) { echo "id=\"disabled\""; }?>>
+                            <a href="mwiki.php" <?php if (!(hasPermission("view-wiki"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
 								<span class="sidebar-title">Wiki</span>
 							</a>
@@ -293,7 +293,7 @@ if (!hasPermission("view-users")) {
 												Console Access
 												<div class="material-switch pull-right">
 													<input id="console" name="console" type="checkbox"/>
-													<label for="console" class="label-danger"></label>
+													<label for="console" class="label-success"></label>
 												</div>
 											</li>
 											
@@ -301,7 +301,7 @@ if (!hasPermission("view-users")) {
 												View Users
 												<div class="material-switch pull-right">
 													<input id="view-users" name="view-users" type="checkbox"/>
-													<label for="view-users" class="label-danger"></label>
+													<label for="view-users" class="label-success"></label>
 												</div>
 											</li>
 											
@@ -309,7 +309,7 @@ if (!hasPermission("view-users")) {
 												Manage Users
 												<div class="material-switch pull-right">
 													<input id="manage-users" name="manage-users" type="checkbox"/>
-													<label for="manage-users" class="label-danger"></label>
+													<label for="manage-users" class="label-success"></label>
 												</div>
 											</li>
 											
@@ -317,7 +317,7 @@ if (!hasPermission("view-users")) {
 												View Stats
 												<div class="material-switch pull-right">
 													<input id="view-stats" name="view-stats" type="checkbox"/>
-													<label for="view-stats" class="label-danger"></label>
+													<label for="view-stats" class="label-success"></label>
 												</div>
 											</li>
 											
@@ -325,7 +325,7 @@ if (!hasPermission("view-users")) {
 												View Bans
 												<div class="material-switch pull-right">
 													<input id="view-bans" name="view-bans" type="checkbox"/>
-													<label for="view-bans" class="label-danger"></label>
+													<label for="view-bans" class="label-success"></label>
 												</div>
 											</li>
 											
@@ -333,7 +333,7 @@ if (!hasPermission("view-users")) {
 												View Wiki
 												<div class="material-switch pull-right">
 													<input id="view-wiki" name="view-wiki" type="checkbox"/>
-													<label for="view-wiki" class="label-danger"></label>
+													<label for="view-wiki" class="label-success"></label>
 												</div>
 											</li>
 											
@@ -341,7 +341,7 @@ if (!hasPermission("view-users")) {
 												Create Pages
 												<div class="material-switch pull-right">
 													<input id="create-pages" name="create-pages" type="checkbox"/>
-													<label for="create-pages" class="label-danger"></label>
+													<label for="create-pages" class="label-success"></label>
 												</div>
 											</li>
 											
@@ -349,7 +349,7 @@ if (!hasPermission("view-users")) {
 												Edit Pages
 												<div class="material-switch pull-right">
 													<input id="edit-pages" name="edit-pages" type="checkbox"/>
-													<label for="edit-pages" class="label-danger"></label>
+													<label for="edit-pages" class="label-success"></label>
 												</div>
 											</li>
 											
@@ -357,7 +357,7 @@ if (!hasPermission("view-users")) {
 												Delete Pages
 												<div class="material-switch pull-right">
 													<input id="delete-pages" name="delete-pages" type="checkbox"/>
-													<label for="delete-pages" class="label-danger"></label>
+													<label for="delete-pages" class="label-success"></label>
 												</div>
 											</li>
 										</ul>
