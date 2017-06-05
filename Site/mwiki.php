@@ -241,7 +241,26 @@ if (!hasPermission("view-wiki")) {
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script type="text/javascript" src="assets/js/notification.js"></script>
-        <?php
+        <script>
+			$(document).ready(function () {
+				(function ($) {
+
+					$('#filter').keyup(function () {
+
+						var rex = new RegExp($(this).val(), 'i');
+						$('.searchable tr').hide();
+						$('.searchable tr').filter(function () {
+							return rex.test($(this).text());
+						}).show();
+
+					})
+
+				}(jQuery));
+
+			});
+		</script>
+		
+		<?php
          if (isset($_POST['oldpassword']) && isset($_POST['newpassword'])) {
 			$oldpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['oldpassword']);
          	$newpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['newpassword']);
