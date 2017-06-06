@@ -4,6 +4,9 @@ public class ConfigLoader {
 
     // Socket
     public int port;
+    public String key;
+    public String store;
+
     // SQL
     public String ip;
     public String user;
@@ -16,6 +19,8 @@ public class ConfigLoader {
 
         // Socket
         port = plugin.getConfig().getInt("port");
+        key = plugin.getConfig().getString("key-pass");
+        store = plugin.getConfig().getString("store-pass");
 
         // SQL
         ip = plugin.getConfig().getString("server");

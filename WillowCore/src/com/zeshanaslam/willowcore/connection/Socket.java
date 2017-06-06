@@ -6,9 +6,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.server.DefaultSSLWebSocketServerFactory;
 import org.java_websocket.server.WebSocketServer;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.HashMap;
 
 public class Socket extends WebSocketServer {
@@ -18,6 +25,12 @@ public class Socket extends WebSocketServer {
     public Socket() {
         super(new InetSocketAddress(Main.plugin.config.port));
         connections = new HashMap<>();
+
+        /*try {
+            this.setWebSocketFactory(new DefaultSSLWebSocketServerFactory(new TLSHandler().createTLSContext()));
+        } catch (NoSuchAlgorithmException | CertificateException | IOException | KeyManagementException | KeyStoreException | UnrecoverableKeyException e) {
+            e.printStackTrace();
+        }*/
     }
 
     @Override

@@ -6,3 +6,7 @@ server: 'localhost'
 user: 'root'
 password: ''
 database: 'royalpanel'
+
+# Socket encryption keys
+store-pass: "Ka&Q9w#43Zd+BDX*8HfC"
+key-pass: "@-s#+74REf^L_%uk&R#A"

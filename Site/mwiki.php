@@ -37,6 +37,7 @@ if (!hasPermission("view-wiki")) {
         <link href='assets/css/users.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/notification.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/animate.css' rel='stylesheet' type='text/css'>
+        <link href='assets/css/editor.css' rel='stylesheet' type='text/css'>
 
         <!-- icon -->
         <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" />
@@ -184,7 +185,46 @@ if (!hasPermission("view-wiki")) {
                 </div>
             </div>
 			
+            <!-- edit page modal -->
+            <!-- line modal -->
+            <div class="modal fade" id="editPage" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                            <h3 class="modal-title" id="lineModalLabel">Edit page</h3>
+                        </div>
+                        <form class="login-form" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                            <div class="modal-body">
 
+                                <!-- content goes here -->
+                                <form>
+                                    <div class="form-group">
+                                        <label for="Title">Title</label>
+                                        <input type="text" class="form-control" name="title" placeholder="Enter title" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editor">Editor</label>
+										<textarea id="editor"></textarea> 
+                                    </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal" role="button">Close</button>
+                                    </div>
+
+                                    <div class="btn-group" role="group">
+                                        <button type="submit" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">Change</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+			
             <!-- main -->
             <main id="page-content-wrapper" role="main">
                 <div class="container">
@@ -231,7 +271,7 @@ if (!hasPermission("view-wiki")) {
 				
 				<?php
 					if (hasPermission("create-pages")) {
-						echo "<button type=\"button\" data-toggle=\"modal\" data-target=\"#addUser\" class=\"btn btn-circle btn-xl\"><i class=\"fa fa-plus\"></i></button>";
+						echo "<button type=\"button\" data-toggle=\"modal\" data-target=\"#editPage\" class=\"btn btn-circle btn-xl\"><i class=\"fa fa-plus\"></i></button>";
 					}
 				?>
             </main>
@@ -241,6 +281,7 @@ if (!hasPermission("view-wiki")) {
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script type="text/javascript" src="assets/js/notification.js"></script>
+        <script type="text/javascript" src="assets/js/editor.js"></script>
         <script>
 			$(document).ready(function () {
 				(function ($) {
@@ -257,6 +298,10 @@ if (!hasPermission("view-wiki")) {
 
 				}(jQuery));
 
+			});
+			
+			$(document).ready(function() {
+				$("#editor").Editor();
 			});
 		</script>
 		
