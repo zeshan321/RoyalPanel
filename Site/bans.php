@@ -7,13 +7,13 @@ include 'assets/functions/mcuserapi.php';
 
 if (!isset($_SESSION['login'])) {
 	if ($_SESSION['login'] != true) {
-		header("location: login");
+		header("location: login.php");
 	}
 }
 
 // Check for password change and update permissions
 if (!login($_SESSION['username'], $_SESSION['passw'])) {
-	header("location: logout");
+	header("location: logout.php");
 }
 ?>
 

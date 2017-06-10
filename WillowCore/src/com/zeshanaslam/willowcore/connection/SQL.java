@@ -15,7 +15,7 @@ public class SQL {
     public SQL() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            connection = DriverManager.getConnection("jdbc:mysql://" + Main.plugin.config.ip + "/" + Main.plugin.config.db + "?user=" + Main.plugin.config.user + "&password=" + Main.plugin.config.pass);
+            connection = DriverManager.getConnection("jdbc:mysql://" + Main.plugin.config.ip + "/" + Main.plugin.config.db, Main.plugin.config.user, Main.plugin.config.pass);
         } catch (Exception e) {
             e.printStackTrace();
         }

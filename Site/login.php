@@ -7,7 +7,7 @@
    
    if (isset($_SESSION['login'])) {
 	if ($_SESSION['login'] == true) {
-		header("location: index");
+		header("location: index.php");
 	}
 }
 ?>
@@ -80,12 +80,12 @@
 				$_SESSION['username'] = $user;
 				
 				showNoti("logedin");
-				header("location: index");
+				header("location: index.php");
 			} else {
 				showNoti("error-login");
 			}
 			
-			header("location: login");
+			header("location: login.php");
 		 }
 		 ?>
     </body>
