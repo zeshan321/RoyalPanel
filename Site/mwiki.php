@@ -286,7 +286,7 @@ if (!hasPermission("view-pages")) {
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Owner</th>
+                                <th>Last edited by</th>
                                 <?php
 								if (hasPermission("edit-page") || hasPermission("delete-page")) {
 									echo "<th>Actions</th>";
@@ -298,7 +298,7 @@ if (!hasPermission("view-pages")) {
                             <?php
 								foreach (getWikiPages() as $row) {									
 									echo "<tr>";
-									echo "<td><a href=\"viewer.php?id=" . $row["id"] . "\">". $row["title"] . "</a></td>";
+									echo "<td><a target=\"_blank\" href=\"viewer.php?id=" . $row["id"] . "\">". $row["title"] . "</a></td>";
 									echo "<td>". $row["owner"] . "</td>";
 									
 									if (hasPermission("edit-page") || hasPermission("delete-page")) {

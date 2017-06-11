@@ -54,7 +54,7 @@ if (empty($data["settings"])) {
 
     <head lang="en">
         <meta charset="UTF-8">
-        <title>Willow - RoyalCraft.co</title>
+        <title>Willow - <?php echo $data["title"]; ?></title>
 
         <!-- cdn css -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -79,9 +79,8 @@ if (empty($data["settings"])) {
         <div class="container col-lg-12 main">
             <div class="col-lg-12 post">
                 <div class="container">
-                    <div class="body-text">
-						<?php echo $data["content"]; ?>
-                    </div>
+					<br><br>
+					<?php echo $data["content"]; ?>
                 </div>
             </div>
 
