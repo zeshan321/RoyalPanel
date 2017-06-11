@@ -105,9 +105,9 @@ if (!hasPermission("console")) {
 							</a>
                         </li>
                         <li>
-                            <a href="mwiki.php" <?php if (!(hasPermission("view-wiki"))) { echo "id=\"disabled\""; }?>>
+                            <a href="mwiki.php" <?php if (!(hasPermission("view-pages"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
-								<span class="sidebar-title">Wiki</span>
+								<span class="sidebar-title">Pages</span>
 							</a>
                         </li>
                         <li>

@@ -129,9 +129,9 @@ if (!hasPermission("view-users")) {
 							</a>
                         </li>
                         <li>
-                            <a href="mwiki.php" <?php if (!(hasPermission("view-wiki"))) { echo "id=\"disabled\""; }?>>
+                            <a href="mwiki.php" <?php if (!(hasPermission("view-pages"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
-								<span class="sidebar-title">Wiki</span>
+								<span class="sidebar-title">Pages</span>
 							</a>
                         </li>
                         <li>
@@ -330,10 +330,10 @@ if (!hasPermission("view-users")) {
 											</li>
 											
 											<li class="list-group-item">
-												View Wiki
+												View Pages
 												<div class="material-switch pull-right">
-													<input id="view-wiki" name="view-wiki" type="checkbox"/>
-													<label for="view-wiki" class="label-success"></label>
+													<input id="view-pages" name="view-pages" type="checkbox"/>
+													<label for="view-pages" class="label-success"></label>
 												</div>
 											</li>
 											
@@ -511,8 +511,8 @@ if (!hasPermission("view-users")) {
 					$('input[name="view-bans"]').prop('checked', true);
 				}
 				
-				if (permissions.indexOf("view-wiki") >= 0) {
-					$('input[name="view-wiki"]').prop('checked', true);
+				if (permissions.indexOf("view-pages") >= 0) {
+					$('input[name="view-pages"]').prop('checked', true);
 				}
 				
 				if (permissions.indexOf("create-pages") >= 0) {
@@ -601,8 +601,8 @@ if (!hasPermission("view-users")) {
 				 $permissions = $permissions . "view-bans ";
 			 }
 			 
-			 if (isset($_POST['view-wiki'])) {
-				 $permissions = $permissions . "view-wiki ";
+			 if (isset($_POST['view-pages'])) {
+				 $permissions = $permissions . "view-pages ";
 			 }
 			 
 			 if (isset($_POST['create-pages'])) {

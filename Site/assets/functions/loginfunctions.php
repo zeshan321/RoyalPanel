@@ -149,24 +149,57 @@ function hasPermission($permissions) {
 }
 
 function getWikiPages() {
-	$rows = array();
-		
-	$query = "select * from wiki";
-	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
-		
-	if (mysqli_num_rows($result)) {
-		while($row = $result->fetch_assoc()) { 
-			array_push($rows, $row);
+	if (hasPermission("create-pages")) {
+		$rows = array();
+			
+		$query = "select * from wiki";
+		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+			
+		if (mysqli_num_rows($result)) {
+			while($row = $result->fetch_assoc()) { 
+				array_push($rows, $row);
+			}
 		}
+		
+		return $rows;
 	}
-	
-	return $rows;
 }
 
 function createWikiPage($title, $owner, $settings, $content) {
-	$query = "insert into wiki (title, owner, settings, content) VALUES ('$title', '$owner', '$settings', '$content')";
-	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+	if (hasPermission("create-pages")) {
+		$query = "insert into wiki (title, owner, settings, content) VALUES ('$title', '$owner', '$settings', '$content')";
+		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
 
-	return $result;
+		return $result;
+	}
+}
+
+function editWikiPage($id, $title, $owner, $settings, $content) {
+	if (hasPermission("edit-pages")) {
+		$query = "update wiki SET title='$title', owner='$owner', settings='$settings', content='$content' where id='$id'";
+		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+
+		return $result;
+	}
+}
+
+function deleteWikiPage($id) {
+	if (hasPermission("delete-pages")) {
+		$query = "delete from wiki where id='$id'";
+		$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+		
+		return $result;
+	}
+}
+
+function getWikiByID($id) {
+	$query = "select * from wiki where id='$id'";
+	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+			
+	if (mysqli_num_rows($result)) {
+		while($row = $result->fetch_assoc()) { 
+			return $row;
+		}
+	}
 }
 ?>

@@ -16,7 +16,7 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
 	header("location: logout.php");
 }
 
-if (!hasPermission("view-wiki")) {
+if (!hasPermission("view-pages")) {
 	header("location: index.php");
 }
 ?>
@@ -109,7 +109,7 @@ if (!hasPermission("view-wiki")) {
                         <li>
                             <a href="mwiki.php" id="selected">
 								<span class="sidebar-icon"><i class="fa fa-file-text"></i></span>
-								<span class="sidebar-title">Wiki</span>
+								<span class="sidebar-title">Pages</span>
 							</a>
                         </li>
                         <li>
@@ -199,6 +199,8 @@ if (!hasPermission("view-wiki")) {
                             <div class="modal-body">
 
                                 <!-- content goes here -->
+								<input type="hidden" name="editid">
+
                                 <div class="form-group">
                                     <label for="title">Title</label>
                                     <input type="text" class="form-control" name="title" placeholder="Enter title" required>
@@ -207,6 +209,14 @@ if (!hasPermission("view-wiki")) {
                                 <div class="form-group">
                                     <label for="settings">Settings</label>
                                     <input type="text" class="form-control" name="settings" placeholder="Enter settings">
+									
+									<a href="#settings" data-toggle="collapse">Click to view options</a>
+									<div id="settings" class="collapse">
+										<p>All settings must be seperated by spaces.</p>
+										<p>'All' will allow anyone with the link to see the page.</p>
+										<p>'Signed' will allow all users with Willow account to see the page.</p>
+										<p>'View' will allow all users signed in with the 'view pages' permission.</p>
+									</div>
                                 </div>
 
                                 <div class="form-group">
@@ -232,25 +242,25 @@ if (!hasPermission("view-wiki")) {
             </div>
 
             <!-- delete modal -->
-            <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal fade" id="deletePage" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                            <h3 class="modal-title" id="lineModalLabel">Delete user</h3>
+                            <h3 class="modal-title" id="lineModalLabel">Delete page</h3>
                         </div>
                         <div class="modal-body">
 
                             <!-- content goes here -->
                             <form role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-                                <h4 id="deleteinfo">Are you sure you want to delete
-                                    <h4>
-
-                                        <div class="form-group">
-                                            <input type="hidden" name="deleteusername">
-                                        </div>
+								<h4 id="deleteinfo"></h4>
+								
+                                <div class="form-group">
+                                    <input type="hidden" name="deleteid">
+                                 </div>
 
                         </div>
+						
                         <div class="modal-footer">
                             <div class="btn-group btn-group-justified" role="group" aria-label="group button">
                                 <div class="btn-group" role="group">
@@ -288,17 +298,17 @@ if (!hasPermission("view-wiki")) {
                             <?php
 								foreach (getWikiPages() as $row) {									
 									echo "<tr>";
-									echo "<td>". $row["title"] . "</td>";
+									echo "<td><a href=\"viewer.php?id=" . $row["id"] . "\">". $row["title"] . "</a></td>";
 									echo "<td>". $row["owner"] . "</td>";
 									
 									if (hasPermission("edit-page") || hasPermission("delete-page")) {
 										echo "<td>";
 										if (hasPermission("edit-page")) {
-											echo "<a class=\"btn btn-info btn-xs\" onclick=\"\" href=\"#\"><span class=\"fa fa-pencil\"></span> Edit</a>";
+											echo "<a class=\"btn btn-info btn-xs\" onclick=\"editWiki('" . $row["title"] . "'," . $row["id"] . ");\" href=\"#\"><span class=\"fa fa-pencil\"></span> Edit</a>";
 										}
 										
 										if (hasPermission("delete-page")) {
-											echo " <a class=\"btn btn-danger btn-xs\" onclick=\"\" href=\"#\"><span class=\"fa fa-pencil\"></span> Delete</a>";
+											echo " <a class=\"btn btn-danger btn-xs\" onclick=\"deleteWiki('" . $row["title"] . "'," . $row["id"] . ");\" href=\"#\"><span class=\"fa fa-pencil\"></span> Delete</a>";
 										}
 										echo "</td>";
 									}
@@ -325,6 +335,14 @@ if (!hasPermission("view-wiki")) {
         <script type="text/javascript" src="assets/js/notification.js"></script>
         <script type="text/javascript" src="assets/js/editor.js"></script>
         <script>
+			function getParam(name) {
+				name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+				var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+				results = regex.exec(location.search);
+				
+				return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+			}
+				
             $(document).ready(function() {
                 (function($) {
 
@@ -344,18 +362,38 @@ if (!hasPermission("view-wiki")) {
 
             $(document).ready(function() {
                 $("#editor").Editor();
+				
+				// Show editor
+				var id = getParam("id");
+				if (id != null) {
+					var data = <?php echo json_encode(getWikiByID(mysqli_real_escape_string($GLOBALS['con'],  $_GET['id']))) ?>;
+					
+					$('input[name="editid"]').val(id);
+					$('input[name="title"]').val(data["title"]);
+					$('input[name="settings"]').val(data["settings"]);
+					$("#editor").Editor("setText", data["content"]);
+
+					$('#editPage').modal('show');
+					
+					$('#editPage').on('hidden.bs.modal', function () {
+						window.location = window.location.href.split("?")[0];
+					});
+				}
             });
 			
             $(document).submit(function() {
                 $("#editor").val($("#editor").Editor("getText"));
             });
 
-            function editWiki(id) {
-
+            function editWiki(title, id) {
+				window.location.href = "mwiki.php?id=" + id;
             }
 
-            function deleteWiki(id) {
-
+            function deleteWiki(title, id) {
+				$('input[name="deleteid"]').val(id);
+				$("#deleteinfo").text("Are you sure you want to delete '" + title + "'?");
+				
+				$('#deletePage').modal('show');
             }
         </script>
 
@@ -382,8 +420,25 @@ if (!hasPermission("view-wiki")) {
          	$settings = mysqli_real_escape_string($GLOBALS['con'], $_POST['settings']);
          	$content = mysqli_real_escape_string($GLOBALS['con'], $_POST['editor']);
 			 
-			 createWikiPage($title, $_SESSION['username'], $settings, $content);
+			 if (isset($_POST['editid']) && !empty($_POST['editid'])) {
+				$id = mysqli_real_escape_string($GLOBALS['con'], $_POST['editid']);
+				editWikiPage($id, $title, $_SESSION['username'], $settings, $content);
+			 } else {
+				createWikiPage($title, $_SESSION['username'], $settings, $content);
+			 }
+			 
 			 if (!headers_sent()) {
+				header('Location:'. explode("?", $_SERVER['PHP_SELF'])[0]);
+			 } else {
+				echo "<script>window.location = window.location.href.split(\"?\")[0];</script>";
+			 }
+		 }
+		 
+		 if (isset($_POST['deleteid'])) {
+			$id = mysqli_real_escape_string($GLOBALS['con'], $_POST['deleteid']);
+			deleteWikiPage($id);
+			
+			if (!headers_sent()) {
 				header('Location:'.$_SERVER['PHP_SELF']);
 			 } else {
 				 reloadPage();
