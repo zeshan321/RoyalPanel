@@ -1,6 +1,7 @@
 package com.zeshanaslam.willowcore.statistics;
 
 import com.zeshanaslam.willowcore.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -43,34 +44,38 @@ public class PlayerStatsManager {
     }
 
     public void loadPlayerStats(Player player) {
-        for (StatType statType : StatType.values()) {
-            String key = player.getUniqueId().toString() + "-" + statType.name();
-            int value = Main.plugin.sql.getStatValue(player, statType);
+        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+            for (StatType statType : StatType.values()) {
+                String key = player.getUniqueId().toString() + "-" + statType.name();
+                int value = Main.plugin.sql.getStatValue(player, statType);
 
-            if (stats.containsKey(key)) {
-                value = value + stats.get(key);
+                if (stats.containsKey(key)) {
+                    value = value + stats.get(key);
 
-                stats.put(key, value);
-            } else {
-                stats.put(key, value);
+                    stats.put(key, value);
+                } else {
+                    stats.put(key, value);
+                }
             }
-        }
+        });
     }
 
     public void savePlayerStats(Player player) {
-        for (StatType statType : StatType.values()) {
-            String key = player.getUniqueId().toString() + "-" + statType.name();
-            int value = stats.get(key);
+        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+            for (StatType statType : StatType.values()) {
+                String key = player.getUniqueId().toString() + "-" + statType.name();
+                int value = stats.get(key);
 
-            // Remove stat
-            stats.remove(key);
+                // Remove stat
+                stats.remove(key);
 
-            // Send to db
-            Main.plugin.sql.saveStatValue(player, statType, String.valueOf(value));
-        }
+                // Send to db
+                Main.plugin.sql.saveStatValue(player, statType, String.valueOf(value));
+            }
 
-        // Remove from play time
-        playTime.remove(player.getUniqueId().toString());
+            // Remove from play time
+            playTime.remove(player.getUniqueId().toString());
+        });
     }
 
     public enum StatType {

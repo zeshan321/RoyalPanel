@@ -1,4 +1,8 @@
 name: WillowCore
 main: com.zeshanaslam.willowcore.Main
+author: Zeshan Aslam
 version: 1.0.0
 load: STARTUP
+commands:
+  Stats:
+    description: WillowCore stats command.

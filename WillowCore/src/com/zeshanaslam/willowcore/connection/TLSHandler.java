@@ -1,6 +1,5 @@
 package com.zeshanaslam.willowcore.connection;
 
-import com.sun.net.httpserver.HttpsConfigurator;
 import com.zeshanaslam.willowcore.Main;
 
 import javax.net.ssl.KeyManagerFactory;

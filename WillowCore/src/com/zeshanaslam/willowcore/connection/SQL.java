@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 public class SQL {
 
@@ -251,5 +252,26 @@ public class SQL {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public HashMap<String, String> getAllStats(Player player) {
+        HashMap<String, String> statValue = new HashMap<>();
+
+        try {
+            String select = "select * from stats where uuid=?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(select);
+            preparedStatement.setString(1, player.getUniqueId().toString());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                statValue.put(resultSet.getString("stat"), resultSet.getString("statvalue"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return statValue;
     }
 }

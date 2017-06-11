@@ -1,5 +1,6 @@
 package com.zeshanaslam.willowcore;
 
+import com.zeshanaslam.willowcore.commands.StatsCommand;
 import com.zeshanaslam.willowcore.connection.SQL;
 import com.zeshanaslam.willowcore.connection.Socket;
 import com.zeshanaslam.willowcore.statistics.PlayerStatsListener;
@@ -56,6 +57,9 @@ public class Main extends JavaPlugin {
         // Register listeners
         getServer().getPluginManager().registerEvents(new Events(this), this);
         getServer().getPluginManager().registerEvents(new PlayerStatsListener(), this);
+
+        // Register commands
+        getCommand("stats").setExecutor(new StatsCommand(this));
 
         // Send socket server status updates
         new BukkitRunnable() {
