@@ -5,15 +5,47 @@ include 'assets/functions/loginfunctions.php';
 include 'assets/functions/generalfunctions.php';
 include 'assets/functions/mcuserapi.php';
 
-if (!isset($_SESSION['login'])) {
-	if ($_SESSION['login'] != true) {
-		header("location: login.php");
-	}
-}
 
-// Check for password change and update permissions
-if (!login($_SESSION['username'], $_SESSION['passw'])) {
-	header("location: logout.php");
+$data = getWikiByID($_GET["id"]);
+
+if (empty($data["settings"])) {
+	if (!isset($_SESSION['login'])) {
+		if ($_SESSION['login'] != true) {
+			header("location: login.php");
+		}
+	}
+
+	// Check for password change and update permissions
+	if (!login($_SESSION['username'], $_SESSION['passw'])) {
+		header("location: logout.php");
+	}
+
+	if (!hasPermission("view-pages")) {
+		header("location: index.php");
+	}
+} else {
+	if (strpos(strtolower($data["settings"]), 'all') !== false) {
+		// for later on.
+	} else {
+		if (strpos(strtolower($data["settings"]), 'signed') !== false) {
+			if (!isset($_SESSION['login'])) {
+				if ($_SESSION['login'] != true) {
+					header("location: login.php");
+				}
+			}
+
+			// Check for password change and update permissions
+			if (!login($_SESSION['username'], $_SESSION['passw'])) {
+				header("location: logout.php");
+			}
+		}
+
+		if (strpos(strtolower($data["settings"]), 'view') !== false) {
+			if (!hasPermission("view-pages")) {
+				header("location: index.php");
+			}
+		}
+	}
 }
 ?>
 
@@ -48,7 +80,7 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
             <div class="col-lg-12 post">
                 <div class="container">
                     <div class="body-text">
-
+						<?php echo $data["content"]; ?>
                     </div>
                 </div>
             </div>
