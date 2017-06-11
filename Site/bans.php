@@ -15,6 +15,10 @@ if (!isset($_SESSION['login'])) {
 if (!login($_SESSION['username'], $_SESSION['passw'])) {
 	header("location: logout.php");
 }
+
+if (!hasPermission("view-bans")) {
+	header("location: index");
+}
 ?>
 
     <!DOCTYPE html>
@@ -181,7 +185,35 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
 
             <!-- main -->
             <main id="page-content-wrapper" role="main">
-				
+				<div class="container">
+                    <input id="filter" type="text" class="form-control" placeholder="Search">
+					
+					<br>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Staff</th>
+                                <th>Reason</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="searchable">
+							<?php
+								/*foreach (getPunishments() as $row) {									
+									echo "<tr>";
+									echo "<td>". $row["uuid"] . "</td>";
+									echo "<td>a</td>";
+									echo "<td>". $row["banned_by_name"] . "</td>";
+									echo "<td>". $row["banned_by_name"] . "</td>";
+
+									echo "</tr>";
+								}*/
+							?>
+                        </tbody>
+                    </table>
+                </div>
             </main>
         </div>
 

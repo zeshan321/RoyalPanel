@@ -31,8 +31,8 @@ if (!hasPermission("view-wiki")) {
         <!-- cdn css -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-		
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+
         <!-- custom css -->
         <link href='assets/css/home.css' rel='stylesheet' type='text/css'>
         <link href='assets/css/users.css' rel='stylesheet' type='text/css'>
@@ -101,7 +101,7 @@ if (!hasPermission("view-wiki")) {
 							</a>
                         </li>
                         <li>
-                            <a href="users.php">
+                            <a href="users.php" <?php if (!(hasPermission("view-users"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-users"></i></span>
 								<span class="sidebar-title">Users</span>
 							</a>
@@ -185,7 +185,7 @@ if (!hasPermission("view-wiki")) {
                     </div>
                 </div>
             </div>
-			
+
             <!-- edit page modal -->
             <!-- line modal -->
             <div class="modal fade" id="editPage" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -195,19 +195,24 @@ if (!hasPermission("view-wiki")) {
                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
                             <h3 class="modal-title" id="lineModalLabel">Edit page</h3>
                         </div>
-                        <form class="login-form" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                        <form name="editForm" class="login-form" role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
                             <div class="modal-body">
 
                                 <!-- content goes here -->
-                                <form>
-                                    <div class="form-group">
-                                        <label for="Title">Title</label>
-                                        <input type="text" class="form-control" name="title" placeholder="Enter title" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="editor">Editor</label>
-										<textarea id="editor"></textarea> 
-                                    </div>
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input type="text" class="form-control" name="title" placeholder="Enter title" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="settings">Settings</label>
+                                    <input type="text" class="form-control" name="settings" placeholder="Enter settings">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="editor">Editor</label>
+                                    <textarea id="editor" name="editor"></textarea>
+                                </div>
 
                             </div>
                             <div class="modal-footer">
@@ -217,27 +222,62 @@ if (!hasPermission("view-wiki")) {
                                     </div>
 
                                     <div class="btn-group" role="group">
-                                        <button type="submit" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">Change</button>
+                                        <button type="submit" class="btn btn-default btn-hover-green" data-action="save" role="button">Create/update</button>
                                     </div>
                                 </div>
                             </div>
-                            </form>
+                        </form>
                     </div>
                 </div>
             </div>
-			
+
+            <!-- delete modal -->
+            <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                            <h3 class="modal-title" id="lineModalLabel">Delete user</h3>
+                        </div>
+                        <div class="modal-body">
+
+                            <!-- content goes here -->
+                            <form role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                                <h4 id="deleteinfo">Are you sure you want to delete
+                                    <h4>
+
+                                        <div class="form-group">
+                                            <input type="hidden" name="deleteusername">
+                                        </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" role="button">Close</button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <!-- main -->
             <main id="page-content-wrapper" role="main">
                 <div class="container">
                     <input id="filter" type="text" class="form-control" placeholder="Search">
-					
-					<br>
+
+                    <br>
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Title</th>
                                 <th>Owner</th>
-								<?php
+                                <?php
 								if (hasPermission("edit-page") || hasPermission("delete-page")) {
 									echo "<th>Actions</th>";
 								}
@@ -245,7 +285,7 @@ if (!hasPermission("view-wiki")) {
                             </tr>
                         </thead>
                         <tbody class="searchable">
-							<?php
+                            <?php
 								foreach (getWikiPages() as $row) {									
 									echo "<tr>";
 									echo "<td>". $row["title"] . "</td>";
@@ -269,8 +309,8 @@ if (!hasPermission("view-wiki")) {
                         </tbody>
                     </table>
                 </div>
-				
-				<?php
+
+                <?php
 					if (hasPermission("create-pages")) {
 						echo "<button type=\"button\" data-toggle=\"modal\" data-target=\"#editPage\" class=\"btn btn-circle btn-xl\"><i class=\"fa fa-plus\"></i></button>";
 					}
@@ -279,48 +319,47 @@ if (!hasPermission("view-wiki")) {
         </div>
 
         <!-- cdn js -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script type="text/javascript" src="assets/js/notification.js"></script>
         <script type="text/javascript" src="assets/js/editor.js"></script>
         <script>
-			$(document).ready(function () {
-				(function ($) {
+            $(document).ready(function() {
+                (function($) {
 
-					$('#filter').keyup(function () {
+                    $('#filter').keyup(function() {
 
-						var rex = new RegExp($(this).val(), 'i');
-						$('.searchable tr').hide();
-						$('.searchable tr').filter(function () {
-							return rex.test($(this).text());
-						}).show();
+                        var rex = new RegExp($(this).val(), 'i');
+                        $('.searchable tr').hide();
+                        $('.searchable tr').filter(function() {
+                            return rex.test($(this).text());
+                        }).show();
 
-					})
+                    })
 
-				}(jQuery));
+                }(jQuery));
 
-			});
+            });
+
+            $(document).ready(function() {
+                $("#editor").Editor();
+            });
 			
-			$(document).ready(function() {
-				$("#editor").Editor();
-			});
-			
-			$('.modal-content').resizable({
-				  //alsoResize: ".modal-dialog",
-				  minHeight: 300,
-				  minWidth: 300
-				});
-				$('.modal-dialog').draggable();
+            $(document).submit(function() {
+                $("#editor").val($("#editor").Editor("getText"));
+            });
 
-				$('#editPage').on('show.bs.modal', function() {
-				  $(this).find('.modal-body').css({
-					'max-height': '100%'
-				  });
-				});
-		</script>
-		
-		<?php
+            function editWiki(id) {
+
+            }
+
+            function deleteWiki(id) {
+
+            }
+        </script>
+
+        <?php
          if (isset($_POST['oldpassword']) && isset($_POST['newpassword'])) {
 			$oldpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['oldpassword']);
          	$newpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['newpassword']);
@@ -338,7 +377,18 @@ if (!hasPermission("view-wiki")) {
 			header("location: users.php");
 		 }
 		 
-		 
+		 if (isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['settings'])) {
+			$title = mysqli_real_escape_string($GLOBALS['con'], $_POST['title']);
+         	$settings = mysqli_real_escape_string($GLOBALS['con'], $_POST['settings']);
+         	$content = mysqli_real_escape_string($GLOBALS['con'], $_POST['editor']);
+			 
+			 createWikiPage($title, $_SESSION['username'], $settings, $content);
+			 if (!headers_sent()) {
+				header('Location:'.$_SERVER['PHP_SELF']);
+			 } else {
+				 reloadPage();
+			 }
+		 }
 		 ?>
     </body>
 

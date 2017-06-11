@@ -30,10 +30,10 @@ public class System {
         return new double[]{20, 20, 20};
     }
 
-    public static int getProcessCpuLoad() {
+    public static double getProcessCpuLoad() {
         OperatingSystemMXBean operatingSystemMXBean =
                 (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
-        return (int) (operatingSystemMXBean.getProcessCpuLoad() * 100);
+        return operatingSystemMXBean.getProcessCpuLoad() * 100;
     }
 }

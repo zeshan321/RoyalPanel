@@ -162,4 +162,11 @@ function getWikiPages() {
 	
 	return $rows;
 }
+
+function createWikiPage($title, $owner, $settings, $content) {
+	$query = "insert into wiki (title, owner, settings, content) VALUES ('$title', '$owner', '$settings', '$content')";
+	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+
+	return $result;
+}
 ?>

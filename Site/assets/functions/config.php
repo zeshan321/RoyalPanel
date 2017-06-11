@@ -2,8 +2,8 @@
 //Database configuration
 $server='localhost';
 $db_user='root';
-$db_pwd='';
-$db_name='royalpanel';
+$db_pwd="U+Sd@k_,g'|F,*6c#5Rp\"+";
+$db_name='Willow';
 
 /*
 
@@ -15,8 +15,8 @@ $db_name='Willow';
 */
 
 // Servers
-$server_names = array("Factions", "Skywars");
-$server_address = array("99.244.112.35:4444", "99.244.112.35:4445");
+$server_names = array("Test server");
+$server_address = array("royalcraft.co:4444");
 
 // Do not touch
 $con = mysqli_connect($server, $db_user, $db_pwd, $db_name) //connect to the database server
