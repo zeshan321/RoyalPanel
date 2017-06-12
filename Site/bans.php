@@ -259,12 +259,17 @@ if (!hasPermission("view-bans")) {
 																	if(isset($_GET['filter'])  && isset($_GET['value'])) {
 																		$filter = mysqli_real_escape_string($GLOBALS['lite_con'], $_GET['filter']);
 																		$value = mysqli_real_escape_string($GLOBALS['lite_con'], $_GET['value']);
+																		$time = getStatValueByUUID("PLAY_TIME", getUUID($filter, $value));
 
-																		echo getStatValueByUUID("PLAY_TIME", getUUID($filter, $value));
+																		echo displayPlayTime($time);
 																	}
 																?>
 																</h2>
-																<p>Minutes played</p>
+																<p><?php
+																	global $time;
+																	echo displayPlayText($time); 
+																	?>
+																</p>
 															</div>
 														</div>
 														<div class="col-md-3">
@@ -514,7 +519,9 @@ if (!hasPermission("view-bans")) {
 				var value = $('#searchinput').val();
 				
 				if (value != "") {
-					window.location.href = "bans.php?value=" + value + "&filter=" + concept;
+					if (concept == "Name" || concept == "UUID" || concept == "IP") {
+						window.location.href = "bans.php?value=" + value + "&filter=" + concept;
+					}
 				}
 			}
 

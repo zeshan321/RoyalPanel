@@ -351,4 +351,34 @@ function getDateValue($date) {
 		return date("d/m/Y H:i:s", $date);
 	}
 }
+
+function displayPlayTime($minutes) {
+	$minutes = (int) $minutes;
+	if ($minutes > 60) {
+		$hours = floor($minutes / 60);
+
+		if ($hours > 24) {
+			return round($hours / 24);
+		}
+
+		return $hours;
+	}
+
+	return $minutes;
+}
+
+function displayPlayText($minutes) {
+	$minutes = (int) $minutes;
+	if ($minutes > 60) {
+		$hours = floor($minutes / 60);
+
+		if ($hours > 24) {
+			return "Days played";
+		}
+
+		return "Hours played";
+	}
+
+	return "Minutes played";
+}
 ?>

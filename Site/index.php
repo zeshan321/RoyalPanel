@@ -199,8 +199,17 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
                                                 <div class="col-md-3">
                                                     <div class="single_counter p-y-2 m-t-1">
                                                         <i class="fa fa-calendar-o m-b-1"></i>
-                                                        <h2 class="statistic-counter"><?php echo getStatValue("PLAY_TIME"); ?></h2>
-                                                        <p>Minutes played</p>
+                                                        <h2 class="statistic-counter">
+															<?php 
+																$time = getStatValue("PLAY_TIME");
+																echo displayPlayTime($time);
+															?>
+														</h2>
+																<p><?php
+																	global $time;
+																	echo displayPlayText($time); 
+																	?>
+																</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
