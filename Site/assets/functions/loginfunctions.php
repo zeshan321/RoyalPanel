@@ -13,8 +13,8 @@ function login($user, $pass) {
 		// Store mc username
 		while($row = $result->fetch_assoc()) {
 			if (password_verify($pass, $row["password"])) {
-				$_SESSION['mcuser'] = uuid_to_username($row["uuid"]);
-				$_SESSION['uuid'] = format_uuid($row["uuid"]);
+				$_SESSION['mcuser'] = getMCName("uuid", $row["uuid"]);
+				$_SESSION['uuid'] = $row["uuid"];
 				$_SESSION['permissions'] = $row["permissions"];
 				$_SESSION['pass'] = $row["password"];
 				$_SESSION['passw'] = $pass;
@@ -125,6 +125,20 @@ function getStatValue($stat) {
 	return 0;
 }
 
+function getStatValueByUUID($stat, $uuid) {
+	$query = "select * from stats where uuid='$uuid' and stat='$stat'";
+	$result = mysqli_query($GLOBALS['con'], $query) or die('error');
+	
+	if (mysqli_num_rows($result)) {
+
+		while($row = $result->fetch_assoc()) {
+			return $row["statvalue"];
+		}
+	}
+	
+	return 0;
+}
+
 function getPlayerCount() {
 	$rows = array();
 	
@@ -200,6 +214,141 @@ function getWikiByID($id) {
 		while($row = $result->fetch_assoc()) { 
 			return $row;
 		}
+	}
+}
+
+function getBans($type, $value) {
+	$rows = array();
+
+	if (strtolower($type) == "name") {
+		$type = "uuid";
+		$value = getUUID("name", $value);
+	} elseif (strtolower($type) == "uuid") {
+		$type = "uuid";
+	} elseif (strtolower($type) == "ip") {
+		$type = "ip";
+	} else {
+		$type = "name";
+	}
+			
+	$query = "select * from litebans_bans where $type='$value'";
+	$result = mysqli_query($GLOBALS['lite_con'], $query) or die('error');
+			
+	if (mysqli_num_rows($result)) {
+		while($row = $result->fetch_assoc()) { 
+			array_push($rows, $row);
+		}
+	}
+		
+	return $rows;
+}
+
+function getMutes($type, $value) {
+	$rows = array();
+
+	if (strtolower($type) == "name") {
+		$type = "uuid";
+		$value = getUUID("name", $value);
+	} elseif (strtolower($type) == "uuid") {
+		$type = "uuid";
+	} elseif (strtolower($type) == "ip") {
+		$type = "ip";
+	} else {
+		$type = "name";
+	}
+			
+	$query = "select * from litebans_mutes where $type='$value'";
+	$result = mysqli_query($GLOBALS['lite_con'], $query) or die('error');
+			
+	if (mysqli_num_rows($result)) {
+		while($row = $result->fetch_assoc()) { 
+			array_push($rows, $row);
+		}
+	}
+		
+	return $rows;
+}
+
+function getWarnings($type, $value) {
+	$rows = array();
+
+	if (strtolower($type) == "name") {
+		$type = "uuid";
+		$value = getUUID("name", $value);
+	} elseif (strtolower($type) == "uuid") {
+		$type = "uuid";
+	} elseif (strtolower($type) == "ip") {
+		$type = "ip";
+	} else {
+		$type = "name";
+	}
+			
+	$query = "select * from litebans_warnings where $type='$value'";
+	$result = mysqli_query($GLOBALS['lite_con'], $query) or die('error');
+			
+	if (mysqli_num_rows($result)) {
+		while($row = $result->fetch_assoc()) { 
+			array_push($rows, $row);
+		}
+	}
+		
+	return $rows;
+}
+
+function getKicks($type, $value) {
+	$rows = array();
+
+	if (strtolower($type) == "name") {
+		$type = "uuid";
+		$value = getUUID("name", $value);
+	} elseif (strtolower($type) == "uuid") {
+		$type = "uuid";
+	} elseif (strtolower($type) == "ip") {
+		$type = "ip";
+	} else {
+		$type = "name";
+	}
+			
+	$query = "select * from litebans_kicks where $type='$value'";
+	$result = mysqli_query($GLOBALS['lite_con'], $query) or die('error');
+			
+	if (mysqli_num_rows($result)) {
+		while($row = $result->fetch_assoc()) { 
+			array_push($rows, $row);
+		}
+	}
+		
+	return $rows;
+}
+
+function getUUID($by, $value) {
+	$query = "select * from litebans_history where $by='$value'";
+	$result = mysqli_query($GLOBALS['lite_con'], $query) or die('error');
+			
+	if (mysqli_num_rows($result)) {
+		while($row = $result->fetch_assoc()) { 
+			return $row["uuid"];
+		}
+	}
+}
+
+function getMCName($by, $value) {
+	$query = "select * from litebans_history where $by='$value'";
+	$result = mysqli_query($GLOBALS['lite_con'], $query) or die('error');
+			
+	if (mysqli_num_rows($result)) {
+		while($row = $result->fetch_assoc()) { 
+			return $row["name"];
+		}
+	}
+}
+
+function getDateValue($date) {
+	if ($date == -1) {
+		return "Permanent Ban";
+	} else {
+		$date = $date / 1000;
+		return date("d/m/Y H:i:s", $date);
 	}
 }
 ?>

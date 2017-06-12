@@ -3,7 +3,6 @@ session_start();
 
 include 'assets/functions/loginfunctions.php';
 include 'assets/functions/generalfunctions.php';
-include 'assets/functions/mcuserapi.php';
 
 if (!isset($_SESSION['login'])) {
 	if ($_SESSION['login'] != true) {
@@ -51,15 +50,15 @@ if (!hasPermission("view-users")) {
                     <div class="notification alert alert-danger error-change" role="alert">
                         <span class="fa fa-minus-circle"></span> Invalid password!
                     </div>
-					
+
                     <div class="notification alert alert-danger error-user" role="alert">
                         <span class="fa fa-minus-circle"></span> Unable to create new user!
                     </div>
-					
+
                     <div class="notification alert alert-danger error-update" role="alert">
                         <span class="fa fa-minus-circle"></span> Unable to update user!
                     </div>
-					
+
                     <div class="notification alert alert-danger error-delete" role="alert">
                         <span class="fa fa-minus-circle"></span> Unable to delete user!
                     </div>
@@ -67,15 +66,15 @@ if (!hasPermission("view-users")) {
                     <div class="notification alert alert-success changed">
                         <span class="fa fa-check-circle"></span> Successfully changed password!
                     </div>
-					
+
                     <div class="notification alert alert-success created">
                         <span class="fa fa-check-circle"></span> Successfully created new user!
                     </div>
-					
+
                     <div class="notification alert alert-success updated">
                         <span class="fa fa-check-circle"></span> Successfully updated user!
                     </div>
-					
+
                     <div class="notification alert alert-success deleted">
                         <span class="fa fa-check-circle"></span> Successfully deleted user!
                     </div>
@@ -146,7 +145,7 @@ if (!hasPermission("view-users")) {
 								<span class="sidebar-title">Stats</span>
 							</a>
                         </li>
-						
+
 						<li>
 							<a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu" <?php if (!(hasPermission("console"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-terminal"></i></span>
@@ -156,7 +155,7 @@ if (!hasPermission("view-users")) {
 							<ul id="submenu" class="panel-collapse collapse panel-switch" role="menu">
 								<?php
 									$index = 0;
-									
+
 									foreach ($server_names as $server) {
 										echo "<li><a href=\"console.php?name=". $server . "&id=" . $index ."\"><i class=\"fa fa-caret-right\"></i>" .  $server . "</a></li>";
 										$index = $index + 1;
@@ -207,7 +206,7 @@ if (!hasPermission("view-users")) {
                     </div>
                 </div>
             </div>
-			
+
             <!-- add user modal -->
             <!-- line modal -->
             <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -254,7 +253,7 @@ if (!hasPermission("view-users")) {
                     </div>
                 </div>
             </div>
-			
+
             <!-- edit user modal -->
             <!-- line modal -->
             <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -296,7 +295,7 @@ if (!hasPermission("view-users")) {
 													<label for="console" class="label-success"></label>
 												</div>
 											</li>
-											
+
 											<li class="list-group-item">
 												View Users
 												<div class="material-switch pull-right">
@@ -304,7 +303,7 @@ if (!hasPermission("view-users")) {
 													<label for="view-users" class="label-success"></label>
 												</div>
 											</li>
-											
+
 											<li class="list-group-item">
 												Manage Users
 												<div class="material-switch pull-right">
@@ -312,7 +311,7 @@ if (!hasPermission("view-users")) {
 													<label for="manage-users" class="label-success"></label>
 												</div>
 											</li>
-											
+
 											<li class="list-group-item">
 												View Stats
 												<div class="material-switch pull-right">
@@ -320,7 +319,7 @@ if (!hasPermission("view-users")) {
 													<label for="view-stats" class="label-success"></label>
 												</div>
 											</li>
-											
+
 											<li class="list-group-item">
 												View Bans
 												<div class="material-switch pull-right">
@@ -328,7 +327,7 @@ if (!hasPermission("view-users")) {
 													<label for="view-bans" class="label-success"></label>
 												</div>
 											</li>
-											
+
 											<li class="list-group-item">
 												View Pages
 												<div class="material-switch pull-right">
@@ -336,7 +335,7 @@ if (!hasPermission("view-users")) {
 													<label for="view-pages" class="label-success"></label>
 												</div>
 											</li>
-											
+
 											<li class="list-group-item">
 												Create Pages
 												<div class="material-switch pull-right">
@@ -344,7 +343,7 @@ if (!hasPermission("view-users")) {
 													<label for="create-pages" class="label-success"></label>
 												</div>
 											</li>
-											
+
 											<li class="list-group-item">
 												Edit Pages
 												<div class="material-switch pull-right">
@@ -352,7 +351,7 @@ if (!hasPermission("view-users")) {
 													<label for="edit-pages" class="label-success"></label>
 												</div>
 											</li>
-											
+
 											<li class="list-group-item">
 												Delete Pages
 												<div class="material-switch pull-right">
@@ -378,8 +377,8 @@ if (!hasPermission("view-users")) {
                     </div>
                 </div>
             </div>
-			
-			
+
+
 			<!-- delete user modal -->
 			<div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 			  <div class="modal-dialog">
@@ -389,11 +388,11 @@ if (!hasPermission("view-users")) {
 						<h3 class="modal-title" id="lineModalLabel">Delete user</h3>
 					</div>
 					<div class="modal-body">
-						
+
 						<!-- content goes here -->
 						<form role="form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
 						  <h4 id="deleteinfo">Are you sure you want to delete <h4>
-						  
+
 						  <div class="form-group">
 							<input type="hidden" name="deleteusername">
 						  </div>
@@ -418,7 +417,7 @@ if (!hasPermission("view-users")) {
             <main id="page-content-wrapper" role="main">
                 <div class="container">
                     <input id="filter" type="text" class="form-control" placeholder="Search">
-					
+
 					<br>
                     <table class="table table-striped">
                         <thead>
@@ -436,24 +435,24 @@ if (!hasPermission("view-users")) {
                         <tbody class="searchable">
 							<?php
 								foreach (getAllUsers() as $row) {
-									$ingameName = uuid_to_username($row["uuid"]);
-									
+									$ingameName = getMCName("uuid", $row["uuid"]);
+
 									echo "<tr>";
 									echo "<td>". $row["username"] . "</td>";
 									echo "<td> " . $ingameName . "</td>";
 									echo "<td>". $row["email"] . "</td>";
-									
+
 									if (hasPermission("manage-users")) {
 										echo "<td><a class=\"btn btn-info btn-xs\" onclick=\"editUser('" . $row["username"] . "', '" . $ingameName ."', '" . $row["email"] . "', '" . $row["permissions"] ."');\" href=\"#\"><span class=\"fa fa-pencil\"></span> Edit</a> <a onclick=\"deleteUser('" . $row["username"] . "');\" href=\"#\" class=\"btn btn-danger btn-xs\"><span class=\"fa fa-trash\"></span> Delete</a></td>";
 									}
-									
+
 									echo "</tr>";
 								}
 							?>
                         </tbody>
                     </table>
                 </div>
-				
+
 				<?php
 					if (hasPermission("manage-users")) {
 						echo "<button type=\"button\" data-toggle=\"modal\" data-target=\"#addUser\" class=\"btn btn-circle btn-xl\"><i class=\"fa fa-plus\"></i></button>";
@@ -484,56 +483,56 @@ if (!hasPermission("view-users")) {
 				}(jQuery));
 
 			});
-			
+
 			function editUser(username, ingame, email, permissions) {
 				$('input[name="editusernamehide"]').val(username);
 				$('input[name="editusername"]').val(username);
 				$('input[name="editmcusername"]').val(ingame);
 				$('input[name="editemail"]').val(email);
-				
+
 				if (permissions.indexOf("console") >= 0) {
 					$('input[name="console"]').prop('checked', true);
 				}
-				
+
 				if (permissions.indexOf("manage-users") >= 0) {
 					$('input[name="manage-users"]').prop('checked', true);
 				}
-				
+
 				if (permissions.indexOf("view-users") >= 0) {
 					$('input[name="view-users"]').prop('checked', true);
 				}
-				
+
 				if (permissions.indexOf("view-stats") >= 0) {
 					$('input[name="view-stats"]').prop('checked', true);
 				}
-				
+
 				if (permissions.indexOf("view-bans") >= 0) {
 					$('input[name="view-bans"]').prop('checked', true);
 				}
-				
+
 				if (permissions.indexOf("view-pages") >= 0) {
 					$('input[name="view-pages"]').prop('checked', true);
 				}
-				
+
 				if (permissions.indexOf("create-pages") >= 0) {
 					$('input[name="create-pages"]').prop('checked', true);
 				}
-				
+
 				if (permissions.indexOf("edit-pages") >= 0) {
 					$('input[name="edit-pages"]').prop('checked', true);
 				}
-				
+
 				if (permissions.indexOf("delete-pages") >= 0) {
 					$('input[name="delete-pages"]').prop('checked', true);
 				}
-				
+
 				$('#editUser').modal('show');
 			}
-			
+
 			function deleteUser(username) {
 				$('input[name="deleteusername"]').val(username);
 				$("#deleteinfo").text("Are you sure you want to delete " + username + "?");
-				
+
 				$('#deleteUser').modal('show');
 			}
         </script>
@@ -541,7 +540,7 @@ if (!hasPermission("view-users")) {
          if (isset($_POST['oldpassword']) && isset($_POST['newpassword'])) {
 			$oldpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['oldpassword']);
          	$newpass = mysqli_real_escape_string($GLOBALS['con'], $_POST['newpassword']);
-						
+
 			if (login($_SESSION['username'], $oldpass)) {
 				if (changePassword($_SESSION['username'], $oldpass, $newpass)) {
 					showNoti("changed");
@@ -551,16 +550,16 @@ if (!hasPermission("view-users")) {
 			} else {
 				showNoti("error-change");
 			}
-			
+
 			header("location: users.php");
 		 }
-		 
+
 		 if (isset($_POST['addusername']) && isset($_POST['addpassword']) && isset($_POST['addmcusername']) && isset($_POST['addemail'])) {
 			 $user = mysqli_real_escape_string($GLOBALS['con'], $_POST['addusername']);
 			 $pass = mysqli_real_escape_string($GLOBALS['con'], $_POST['addpassword']);
-			 $uuid = mysqli_real_escape_string($GLOBALS['con'], username_to_uuid($_POST['addmcusername']));
+			 $uuid = mysqli_real_escape_string($GLOBALS['con'], getUUID("name", $_POST['addmcusername']));
 			 $email = mysqli_real_escape_string($GLOBALS['con'], $_POST['addemail']);
-			 
+
 			 if (createUser($user, $pass, $uuid, $email)) {
 				 showNoti("created");
 			 } else {
@@ -573,76 +572,76 @@ if (!hasPermission("view-users")) {
 				 reloadPage();
 			 }
 		 }
-		 
+
 		 if (isset($_POST['editusernamehide']) && isset($_POST['editmcusername']) && isset($_POST['editemail'])) {
 			 $user = mysqli_real_escape_string($GLOBALS['con'], $_POST['editusernamehide']);
 			 $pass = mysqli_real_escape_string($GLOBALS['con'], $_POST['editpassword']);
-			 $uuid = mysqli_real_escape_string($GLOBALS['con'], username_to_uuid($_POST['editmcusername']));
+			 $uuid = mysqli_real_escape_string($GLOBALS['con'], getUUID("name", $_POST['editmcusername']));
 			 $email = mysqli_real_escape_string($GLOBALS['con'], $_POST['editemail']);
-			 
+
 			 $permissions = "";
 			 if (isset($_POST['console'])) {
 				 $permissions = $permissions . "console ";
 			 }
-			 
+
 			 if (isset($_POST['manage-users'])) {
 				 $permissions = $permissions . "manage-users ";
 			 }
-			 
+
 			 if (isset($_POST['view-users'])) {
 				 $permissions = $permissions . "view-users ";
 			 }
-			 
+
 			 if (isset($_POST['view-stats'])) {
 				 $permissions = $permissions . "view-stats ";
 			 }
-			 
+
 			 if (isset($_POST['view-bans'])) {
 				 $permissions = $permissions . "view-bans ";
 			 }
-			 
+
 			 if (isset($_POST['view-pages'])) {
 				 $permissions = $permissions . "view-pages ";
 			 }
-			 
+
 			 if (isset($_POST['create-pages'])) {
 				 $permissions = $permissions . "create-pages ";
 			 }
-			 
+
 			 if (isset($_POST['edit-pages'])) {
 				 $permissions = $permissions . "edit-pages ";
 			 }
-			 
+
 			 if (isset($_POST['delete-pages'])) {
 				 $permissions = $permissions . "delete-pages ";
 			 }
-			 
+
 			 if ($permissions == "") {
 				 $permissions = "none";
 			 }
-			 
+
 			 if (updateUser($user, $pass, $uuid, $email, $permissions)) {
 				 showNoti("updated");
 			 } else {
 				 showNoti("error-update");
 			 }
-			 
+
 			 if (!headers_sent()) {
 				header('Location:'.$_SERVER['PHP_SELF']);
 			 } else {
 				 reloadPage();
 			 }
 		 }
-		 
+
 		 if (isset($_POST['deleteusername'])) {
 			 $user = mysqli_real_escape_string($GLOBALS['con'], $_POST['deleteusername']);
-			 
+
 			 if (deleteUser($user)) {
 				 showNoti("deleted");
 			 } else {
 				 showNoti("error-delete");
 			 }
-			 
+
 			 if (!headers_sent()) {
 				header('Location:'.$_SERVER['PHP_SELF']);
 			 } else {

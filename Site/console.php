@@ -3,21 +3,20 @@ session_start();
 
 include 'assets/functions/loginfunctions.php';
 include 'assets/functions/generalfunctions.php';
-include 'assets/functions/mcuserapi.php';
 
 if (!isset($_SESSION['login'])) {
 	if ($_SESSION['login'] != true) {
-		header("location: login");
+		header("location: login.php");
 	}
 }
 
 // Check for password change and update permissions
 if (!login($_SESSION['username'], $_SESSION['passw'])) {
-	header("location: logout");
+	header("location: logout.php");
 }
 
 if (!hasPermission("console")) {
-	header("location: index");
+	header("location: index.php");
 }
 ?>
 
@@ -244,8 +243,8 @@ if (!hasPermission("console")) {
                         </div>
                         <div class="col-md-4">
                             <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    Online users
+                                <div id="online-users" class="panel-heading">
+                                    Online users (0)
                                 </div>
                                 <div id="players" class="panel-body">
                                     <ul id="playerData" class="media-list">
@@ -347,9 +346,7 @@ if (!hasPermission("console")) {
 				}
 				
 				
-				function onMessage(event) {
-					console.log(event.data);
-					
+				function onMessage(event) {					
 					var data = event.data;
 					data = data.replace("<", "[");
 					data = data.replace(">", "]");
@@ -372,10 +369,12 @@ if (!hasPermission("console")) {
 
 
 						$("#playerData").append(output);
+						$("#online-users").html("Online users (" + (document.getElementById('playerData').childNodes.length - 1) + ")");
 					} else if (event.data.startsWith("LEAVE: ")) {
 						var username = event.data.replace("LEAVE: ", "");
 						
 						$('#player-' + username).remove();
+						$("#online-users").html("Online users (" + (document.getElementById('playerData').childNodes.length - 1) + ")");
 					} else if (event.data.startsWith("TPS: ")) {
 						var tps = parseInt(event.data.replace("TPS:", ""));
 						var percent = ((tps * 1.0) / 20) * 100;
@@ -423,6 +422,13 @@ if (!hasPermission("console")) {
 						output += "<\/li>";
 						
 						$("#consoleData").append(output);
+
+						var ul = document.getElementById('consoleData');
+						if (ul.childNodes.length > 150) {
+							$('#consoleData li').eq(0).remove();
+						}
+
+						$("#console").scrollTop($("#console")[0].scrollHeight);
 					}
 				}
 				

@@ -3,7 +3,6 @@
 
    include 'assets/functions/loginfunctions.php';
    include 'assets/functions/generalfunctions.php';
-   include 'assets/functions/mcuserapi.php';
    
    if (isset($_SESSION['login'])) {
 	if ($_SESSION['login'] == true) {

@@ -3,7 +3,6 @@ session_start();
 
 include 'assets/functions/loginfunctions.php';
 include 'assets/functions/generalfunctions.php';
-include 'assets/functions/mcuserapi.php';
 
 if (!isset($_SESSION['login'])) {
 	if ($_SESSION['login'] != true) {
@@ -106,7 +105,7 @@ if (!login($_SESSION['username'], $_SESSION['passw'])) {
 							</a>
                         </li>
                         <li>
-                            <a href="#" <?php if (!(hasPermission("view-bans"))) { echo "id=\"disabled\""; }?>>
+                            <a href="bans.php" <?php if (!(hasPermission("view-bans"))) { echo "id=\"disabled\""; }?>>
 								<span class="sidebar-icon"><i class="fa fa-book"></i></span>
 								<span class="sidebar-title">Bans</span>
 							</a>

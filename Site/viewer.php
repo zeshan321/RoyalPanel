@@ -3,8 +3,6 @@ session_start();
 
 include 'assets/functions/loginfunctions.php';
 include 'assets/functions/generalfunctions.php';
-include 'assets/functions/mcuserapi.php';
-
 
 $data = getWikiByID($_GET["id"]);
 
