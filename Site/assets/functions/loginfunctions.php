@@ -163,7 +163,7 @@ function hasPermission($permissions) {
 }
 
 function getWikiPages() {
-	if (hasPermission("create-pages")) {
+	if (hasPermission("view-pages")) {
 		$rows = array();
 			
 		$query = "select * from wiki";

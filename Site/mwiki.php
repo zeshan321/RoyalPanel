@@ -364,8 +364,8 @@ if (!hasPermission("view-pages")) {
 				
 				// Show editor
 				var id = getParam("id");
-				if (id != null) {
-					var data = <?php echo json_encode(getWikiByID(mysqli_real_escape_string($GLOBALS['con'],  $_GET['id']))) ?>;
+				if (id != "") {
+					var data = <?php if (isset($_GET['id'])) { echo json_encode(getWikiByID(mysqli_real_escape_string($GLOBALS['con'],  $_GET['id']))); } ?>
 					
 					$('input[name="editid"]').val(id);
 					$('input[name="title"]').val(data["title"]);
