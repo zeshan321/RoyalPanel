@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class SQL {
 
-    private Connection connection;
+    public Connection connection;
 
     public SQL() {
         try {
@@ -26,6 +26,8 @@ public class SQL {
     }
 
     public boolean isValidUser(String username, String password) {
+        Main.plugin.restartConnection();
+
         try {
             String select = "select * from users where BINARY username=? and password=?";
 
@@ -50,6 +52,8 @@ public class SQL {
     }
 
     public boolean containsLastJoin(Player player) {
+        Main.plugin.restartConnection();
+
         try {
             String select = "select * from stats where uuid=? and stat=?";
 
@@ -70,6 +74,8 @@ public class SQL {
     }
 
     public void saveLastJoin(Player player) {
+        Main.plugin.restartConnection();
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(System.currentTimeMillis()));
         String date = calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH);
@@ -104,6 +110,8 @@ public class SQL {
     }
 
     public String getLastJoin(Player player) {
+        Main.plugin.restartConnection();
+
         try {
             String select = "select * from stats where uuid=? and stat=?";
 
@@ -124,6 +132,8 @@ public class SQL {
     }
 
     public int getStatValue(Player player, PlayerStatsManager.StatType statType) {
+        Main.plugin.restartConnection();
+
         try {
             String select = "select * from stats where uuid=? and stat=?";
 
@@ -144,6 +154,8 @@ public class SQL {
     }
 
     public boolean containsStatValue(Player player, PlayerStatsManager.StatType statType) {
+        Main.plugin.restartConnection();
+
         try {
             String select = "select * from stats where uuid=? and stat=?";
 
@@ -164,6 +176,8 @@ public class SQL {
     }
 
     public void saveStatValue(Player player, PlayerStatsManager.StatType statType, String value) {
+        Main.plugin.restartConnection();
+
         if (containsStatValue(player, statType)) {
             try {
                 String update = "update stats SET statvalue=? where uuid=? and stat=?";
@@ -194,6 +208,8 @@ public class SQL {
     }
 
     public int containsPlayerCount(String date) {
+        Main.plugin.restartConnection();
+
         try {
             String select = "select * from playercount where countdate=?";
 
@@ -213,6 +229,8 @@ public class SQL {
     }
 
     public void savePlayerCount(String date) {
+        Main.plugin.restartConnection();
+
         int count = containsPlayerCount(date);
 
         if (count != -1) {
@@ -243,6 +261,8 @@ public class SQL {
     }
 
     public void clearOldPlayerCount() {
+        Main.plugin.restartConnection();
+
         try {
             String query = "DELETE FROM playercount WHERE id ORDER BY id DESC LIMIT -1 OFFSET 10";
 
@@ -254,14 +274,16 @@ public class SQL {
         }
     }
 
-    public HashMap<String, String> getAllStats(Player player) {
+    public HashMap<String, String> getAllStats(String uuid) {
+        Main.plugin.restartConnection();
+
         HashMap<String, String> statValue = new HashMap<>();
 
         try {
             String select = "select * from stats where uuid=?";
 
             PreparedStatement preparedStatement = connection.prepareStatement(select);
-            preparedStatement.setString(1, player.getUniqueId().toString());
+            preparedStatement.setString(1, uuid);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 

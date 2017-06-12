@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class Main extends JavaPlugin {
 
@@ -90,6 +91,19 @@ public class Main extends JavaPlugin {
             socket.stop();
             socket = null;
         } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void restartConnection() {
+        try {
+            if (sql == null || sql.connection == null || sql.connection.isClosed()) {
+                // Setup SQL
+                new Thread(() -> {
+                    sql = new SQL();
+                }).start();
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

@@ -4,12 +4,13 @@ import com.zeshanaslam.willowcore.Main;
 import com.zeshanaslam.willowcore.statistics.PlayerStatsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
 
 public class StatsCommand implements CommandExecutor {
 
@@ -21,11 +22,14 @@ public class StatsCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!sender.hasPermission("WillowCore.stats")) {
+            return false;
+        }
         if (args.length <= 0) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
 
-                sendStats(player);
+                sendStats(sender, player.getName(), player.getUniqueId().toString(), true);
             } else {
                 sender.sendMessage(ChatColor.RED + "Usage from console: /stats <player>");
                 return false;
@@ -33,9 +37,15 @@ public class StatsCommand implements CommandExecutor {
         } else {
             Player player = Bukkit.getPlayer(args[0]);
             if (player != null) {
-                sendStats(player);
+                sendStats(sender, player.getName(), player.getUniqueId().toString(), true);
             } else {
-                sender.sendMessage(ChatColor.RED + "Unable to find player: " + args[0] + ".");
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
+
+                if (offlinePlayer != null && offlinePlayer.getUniqueId() != null) {
+                    sendStats(sender, offlinePlayer.getName(), offlinePlayer.getUniqueId().toString(), false);
+                } else {
+                    sender.sendMessage(ChatColor.RED + "Unable to find player: " + args[0] + ".");
+                }
                 return false;
             }
         }
@@ -43,33 +53,52 @@ public class StatsCommand implements CommandExecutor {
         return true;
     }
 
-    public void sendStats(Player player) {
-        player.sendMessage(ChatColor.GRAY + "Stats for " + ChatColor.RED + player.getName() + ChatColor.GRAY + ":");
-        player.sendMessage("");
-        player.sendMessage(ChatColor.GRAY + "Total logins: " + ChatColor.RED + plugin.playerStatsManager.stats.get(player.getUniqueId().toString() + "-" + PlayerStatsManager.StatType.LOGIN.name()));
-
-        long difference = System.currentTimeMillis() - Main.plugin.playerStatsManager.playTime.get(player.getUniqueId().toString());
-        int minutes = (int) (difference / (60 * 1000) % 60);
-        if (minutes <= 60) {
-            player.sendMessage(ChatColor.GRAY + "Current time: " + ChatColor.RED + minutes + ChatColor.GRAY + " minutes");
+    public void sendStats(CommandSender sender, String name, String uuid, boolean online) {
+        if (online) {
+            sender.sendMessage(ChatColor.GRAY + "Stats for " + ChatColor.RED + name + ChatColor.GRAY + ":");
+            sender.sendMessage("");
+            sender.sendMessage(ChatColor.GRAY + "Total logins: " + ChatColor.RED + plugin.playerStatsManager.stats.get(uuid+ "-" + PlayerStatsManager.StatType.LOGIN.name()));
+            sender.sendMessage(ChatColor.GRAY + "Play time: " + ChatColor.RED + getPlayTime(0, uuid, true));
+            sender.sendMessage(ChatColor.GRAY + "Total punishments: " + ChatColor.RED + plugin.playerStatsManager.stats.get(uuid + "-" + PlayerStatsManager.StatType.PUNISHMENTS.name()));
+            sender.sendMessage(ChatColor.GRAY + "Messages sent: " + ChatColor.RED + plugin.playerStatsManager.stats.get(uuid + "-" + PlayerStatsManager.StatType.MESSAGES_SENT.name()));
         } else {
-            double hours = minutes / 60;
-            hours = Math.round(hours);
+            HashMap<String, String> stats = plugin.sql.getAllStats(uuid);
 
-            player.sendMessage(ChatColor.GRAY + "Current time: " + ChatColor.RED + hours + ChatColor.GRAY + " hours");
+            if (!stats.isEmpty()) {
+                sender.sendMessage(ChatColor.GRAY + "Stats for " + ChatColor.RED + name + ChatColor.GRAY + ":");
+                sender.sendMessage("");
+                sender.sendMessage(ChatColor.GRAY + "Total logins: " + ChatColor.RED + stats.get(PlayerStatsManager.StatType.LOGIN.name()));
+                sender.sendMessage(ChatColor.GRAY + "Play time: " + ChatColor.RED + getPlayTime(Integer.valueOf(stats.get(PlayerStatsManager.StatType.PLAY_TIME.name())), uuid, false));
+                sender.sendMessage(ChatColor.GRAY + "Total punishments: " + ChatColor.RED + stats.get(PlayerStatsManager.StatType.PUNISHMENTS.name()));
+                sender.sendMessage(ChatColor.GRAY + "Messages sent: " + ChatColor.RED + stats.get(PlayerStatsManager.StatType.MESSAGES_SENT.name()));
+            } else {
+                sender.sendMessage(ChatColor.RED + "Unable to find player: " + name + ".");
+            }
+        }
+    }
+
+    public String getPlayTime(int minutes, String uuid, boolean online) {
+        String output;
+
+        if (online) {
+            long difference = System.currentTimeMillis() - Main.plugin.playerStatsManager.playTime.get(uuid);
+            minutes = (int) (difference / (60 * 1000) % 60);
         }
 
-        minutes = plugin.playerStatsManager.stats.get(player.getUniqueId().toString() + "-" + PlayerStatsManager.StatType.PLAY_TIME.name());
-        if (minutes <= 60) {
-            player.sendMessage(ChatColor.GRAY + "Play time: " + ChatColor.RED + minutes + ChatColor.GRAY + " minutes");
-        } else {
-            double hours = minutes / 60;
-            hours = Math.round(hours);
+        if (minutes > 60) {
+            int hours = (int) Math.floor(minutes / 60);
 
-            player.sendMessage(ChatColor.GRAY + "Play time: " + ChatColor.RED + hours + ChatColor.GRAY + " hours");
+            if (hours > 24) {
+                int days = Math.round(hours / 24);
+
+                output = days + "" +  ChatColor.GRAY + " days";
+            } else {
+                output = hours + "" +  ChatColor.GRAY + " hours";
+            }
+        } else {
+            output = minutes + "" +  ChatColor.GRAY + " minutes";
         }
 
-        player.sendMessage(ChatColor.GRAY + "Total punishments: " + ChatColor.RED + plugin.playerStatsManager.stats.get(player.getUniqueId().toString() + "-" + PlayerStatsManager.StatType.PUNISHMENTS.name()));
-        player.sendMessage(ChatColor.GRAY + "Messages sent: " + ChatColor.RED + plugin.playerStatsManager.stats.get(player.getUniqueId().toString() + "-" + PlayerStatsManager.StatType.MESSAGES_SENT.name()));
+        return output;
     }
 }
