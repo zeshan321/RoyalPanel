@@ -492,38 +492,56 @@ if (!hasPermission("view-users")) {
 
 				if (permissions.indexOf("console") >= 0) {
 					$('input[name="console"]').prop('checked', true);
+				} else {
+					$('input[name="console"]').prop('checked', false);
 				}
 
 				if (permissions.indexOf("manage-users") >= 0) {
 					$('input[name="manage-users"]').prop('checked', true);
+				} else {
+					$('input[name="manage-users"]').prop('checked', false);
 				}
 
 				if (permissions.indexOf("view-users") >= 0) {
 					$('input[name="view-users"]').prop('checked', true);
+				} else {
+					$('input[name="view-users"]').prop('checked', false);
 				}
 
 				if (permissions.indexOf("view-stats") >= 0) {
 					$('input[name="view-stats"]').prop('checked', true);
+				} else {
+					$('input[name="view-stats"]').prop('checked', false);
 				}
 
 				if (permissions.indexOf("view-bans") >= 0) {
 					$('input[name="view-bans"]').prop('checked', true);
+				} else {
+					$('input[name="view-bans"]').prop('checked', false);
 				}
 
 				if (permissions.indexOf("view-pages") >= 0) {
 					$('input[name="view-pages"]').prop('checked', true);
+				} else {
+					$('input[name="view-pages"]').prop('checked', false);
 				}
 
 				if (permissions.indexOf("create-pages") >= 0) {
 					$('input[name="create-pages"]').prop('checked', true);
+				} else {
+					$('input[name="create-pages"]').prop('checked', false);
 				}
 
 				if (permissions.indexOf("edit-pages") >= 0) {
 					$('input[name="edit-pages"]').prop('checked', true);
+				} else {
+					$('input[name="edit-pages"]').prop('checked', false);
 				}
 
 				if (permissions.indexOf("delete-pages") >= 0) {
 					$('input[name="delete-pages"]').prop('checked', true);
+				} else {
+					$('input[name="delete-pages"]').prop('checked', false);
 				}
 
 				$('#editUser').modal('show');
